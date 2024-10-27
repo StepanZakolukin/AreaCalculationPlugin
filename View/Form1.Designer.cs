@@ -1,4 +1,4 @@
-﻿namespace AreaCalculationPlugin
+﻿namespace AreaCalculationPlugin.View
 {
     partial class Form1
     {
