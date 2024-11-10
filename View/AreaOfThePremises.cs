@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using System.Drawing;
 
 namespace AreaCalculationPlugin.View;
 
@@ -23,6 +24,13 @@ public partial class AreaOfThePremises : Form
         Padding = new Padding(30, 22, 30, 20);
 
         GridOfElements = CreatAGridOfElements();
+
+        //Paint += AreaOfThePremises_Paint;
+    }
+
+    private void AreaOfThePremises_Paint(object? sender, PaintEventArgs e)
+    {
+        e.Graphics.CreateARoundedRectangle(new Pen(Color.Red), new Size(500, 500), new Point(10, 10), 50);
     }
 
     TableLayoutPanel CreatAGridOfElements()
@@ -31,8 +39,10 @@ public partial class AreaOfThePremises : Form
         {
             Dock = DockStyle.Fill,
             Margin = new Padding(0),
+            Padding = new Padding(10)
         };
-        // table.CellPaint += TableOnCellPaint;
+
+        table.Paint += TableOnCellPaint;
         Controls.Add(table);
         
         table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
@@ -49,9 +59,12 @@ public partial class AreaOfThePremises : Form
         return table;
     }
 
-    private void TableOnCellPaint(object? sender, TableLayoutCellPaintEventArgs e)
+    private void TableOnCellPaint(object? sender, PaintEventArgs e)
     {
-        e.Graphics.DrawRectangle(new Pen(ColorTranslator.FromHtml("#EEEEEE"), 3), e.ClipRectangle);
+        var table = sender as TableLayoutPanel;
+        var borderSize = 3;
+        e.Graphics.CreateARoundedRectangle(new Pen(Color.Red, 3), new Size(table.Size.Width - 2 * borderSize - 1, table.Size.Height - 2 * borderSize - 1),
+            new Point(1, 1), 10);
     }
 
     #region Первая колонка
