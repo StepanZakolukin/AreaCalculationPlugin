@@ -16,12 +16,17 @@ public static class GraphicsExtensions
                 new Point(point.X + size.Width * i, point.Y + size.Height - radius));
         }
 
+        DrawTheCorners(graphics, pen, size, point, radius);
+    }
+
+    private static void DrawTheCorners(Graphics graphics, Pen pen, Size size, Point point, int radius)
+    {
         graphics.DrawArc(pen, new Rectangle(point, new Size(2 * radius, 2 * radius)), 180, 90);
         graphics.DrawArc(pen, new Rectangle(new Point(point.X - 2 * radius + size.Width, point.Y),
-            new Size(2 * radius, 2 * radius)), 270, 90);
+        new Size(2 * radius, 2 * radius)), 268, 94);
         graphics.DrawArc(pen, new Rectangle(new Point(point.X - 2 * radius + size.Width, point.Y + size.Height - 2 * radius),
-            new Size(2 * radius, 2 * radius)), 0, 90);
+        new Size(2 * radius, 2 * radius)), -2, 94);
         graphics.DrawArc(pen, new Rectangle(new Point(point.X + radius - radius, point.Y + size.Height - 2 * radius),
-            new Size(2 * radius, 2 * radius)), 90, 90);
+            new Size(2 * radius, 2 * radius)), 88, 94);
     }
 }

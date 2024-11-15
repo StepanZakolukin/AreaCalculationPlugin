@@ -1,5 +1,4 @@
 using System.Runtime.InteropServices;
-using System.Drawing;
 
 namespace AreaCalculationPlugin.View;
 
@@ -16,21 +15,14 @@ public partial class AreaOfThePremises : Form
     public AreaOfThePremises()
     {
         InitializeComponent();
-        Size = new Size(660, 589);
-        FormBorderStyle = FormBorderStyle.Sizable;
         BackColor = ColorTranslator.FromHtml("#F5F6F8");
-        Text = "Площади помещений";
         CustomWindow(ColorTranslator.FromHtml("#F5F6F8"), Handle);
+        Text = "Площади помещений";
+        Size = new Size(766, 672);
         Padding = new Padding(30, 22, 30, 20);
+        FormBorderStyle = FormBorderStyle.Sizable;
 
         GridOfElements = CreatAGridOfElements();
-
-        //Paint += AreaOfThePremises_Paint;
-    }
-
-    private void AreaOfThePremises_Paint(object? sender, PaintEventArgs e)
-    {
-        e.Graphics.CreateARoundedRectangle(new Pen(Color.Red), new Size(500, 500), new Point(10, 10), 50);
     }
 
     TableLayoutPanel CreatAGridOfElements()
@@ -39,7 +31,7 @@ public partial class AreaOfThePremises : Form
         {
             Dock = DockStyle.Fill,
             Margin = new Padding(0),
-            Padding = new Padding(10)
+            Padding = new Padding(10),
         };
 
         table.Paint += TableOnCellPaint;
@@ -63,8 +55,10 @@ public partial class AreaOfThePremises : Form
     {
         var table = sender as TableLayoutPanel;
         var borderSize = 3;
-        e.Graphics.CreateARoundedRectangle(new Pen(Color.Red, 3), new Size(table.Size.Width - 2 * borderSize - 1, table.Size.Height - 2 * borderSize - 1),
-            new Point(1, 1), 10);
+        e.Graphics.CreateARoundedRectangle(pen: new Pen(Color.Red, borderSize),
+            size: new Size(table.Size.Width - 2 * borderSize, table.Size.Height - 2 * borderSize),
+            point: new Point(borderSize, borderSize),
+            radius: 10);
     }
 
     #region Первая колонка
