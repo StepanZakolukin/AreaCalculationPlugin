@@ -162,13 +162,13 @@ public partial class AreaOfThePremises : Form
         secondColumn.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
 
         for (var i = 0; i < 6; i++)
-            secondColumn.RowStyles.Add(new RowStyle(SizeType.Percent, 7.5F));
-        secondColumn.RowStyles.Add(new RowStyle(SizeType.Percent, 10.72F));
-        secondColumn.RowStyles.Add(new RowStyle(SizeType.Percent, 7.5F));
-        secondColumn.RowStyles.Add(new RowStyle(SizeType.Percent, 3.57F));
-        secondColumn.RowStyles.Add(new RowStyle(SizeType.Percent, 10.84F));
+            secondColumn.RowStyles.Add(new RowStyle(SizeType.Absolute, 42));
+        secondColumn.RowStyles.Add(new RowStyle(SizeType.Absolute, 60));
+        secondColumn.RowStyles.Add(new RowStyle(SizeType.Absolute, 42));
+        secondColumn.RowStyles.Add(new RowStyle(SizeType.Absolute, 20));
+        secondColumn.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
         for (var i = 0; i < 2; i++)
-            secondColumn.RowStyles.Add(new RowStyle(SizeType.Percent, 5));
+            secondColumn.RowStyles.Add(new RowStyle(SizeType.Absolute, 28));
         
         FillSecondColumn(secondColumn);
 
@@ -218,10 +218,10 @@ public partial class AreaOfThePremises : Form
     {
         var table = new TableLayoutPanel { Dock = DockStyle.Fill, BackColor = Color.White };
         
-        table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 16.69F));
-        table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 45.83F));
-        table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 18.21F));
-        table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 16.23F));
+        table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50.71F));
+        table.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 150));
+        table.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 60));
+        table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 49.29F));
 
         table.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
 
@@ -237,8 +237,9 @@ public partial class AreaOfThePremises : Form
     {
         var cell1 = new TableLayoutPanel { Dock = DockStyle.Fill, BackColor = Color.White };
         cell1.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
-        cell1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 46.42F));
-        cell1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 53.57F));
+        cell1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+        cell1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 150));
+
         cell1.Controls.Add(new Panel { Dock = DockStyle.Fill, BackColor = Color.White }, 0, 0);
         ButtonSettingCoefficient.Dock = DockStyle.Fill;
         cell1.Controls.Add(ButtonSettingCoefficient, 1, 0);
@@ -247,8 +248,8 @@ public partial class AreaOfThePremises : Form
         
         var cell2 = new TableLayoutPanel { Dock = DockStyle.Fill, BackColor = Color.White };
         cell2.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
-        cell2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 53.57F));
-        cell2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 46.42F));
+        cell2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+        cell2.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 130));
         cell2.Controls.Add(new Panel { Dock = DockStyle.Fill, BackColor = Color.White }, 0, 0);
         ButtonCalculate.Dock = DockStyle.Fill;
         cell2.Controls.Add(ButtonCalculate, 1, 0);
