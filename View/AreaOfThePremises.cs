@@ -7,7 +7,9 @@ public partial class AreaOfThePremises : Form
 {
     private Container firstColumn;
     private Container secondColumn;
+    private readonly TreeView ListOfPremises;
     private readonly List<DropdownListForGrouping> groupingParameters;
+
     private readonly string[] HeadersOfGroupingControls = ["Группировать", "Затем по", "Затем по"];
     private MyButton SelectAllButton = new(margin: new Padding(4, 0, 10, 6)) { Text = "Выбрать все" };
     private MyButton ButtonRevealEverything = new(margin: new Padding(4, 0, 10, 6)) { Text = "Раскрыть все" };
@@ -27,6 +29,8 @@ public partial class AreaOfThePremises : Form
         FormBorderStyle = FormBorderStyle.Sizable;
 
         groupingParameters = [];
+        ListOfPremises = new TreeView();
+        Fill();
         Controls.Add(CreatAGridOfElements());
 
         SizeChanged += ChangeMarginsOfMainColumns;
@@ -111,13 +115,11 @@ public partial class AreaOfThePremises : Form
         table.RowStyles.Add(new RowStyle(SizeType.Percent, 21.18F));
         table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
 
-        table.Controls.Add(new TreeView
-        {
-            Dock = DockStyle.Fill,
-            BackColor = Color.White,
-            Padding = new Padding(0),
-            Margin = new Padding(6, 0, 6, 5)
-        });
+        table.Controls.Add(ListOfPremises);
+        ListOfPremises.Dock = DockStyle.Fill;
+        ListOfPremises.BackColor = Color.White;
+        ListOfPremises.Padding = new Padding(0);
+        ListOfPremises.Margin = new Padding(6, 0, 6, 5);
 
         table.Controls.Add(СreateAKeypadForTheFirstColumn(new[,]
         {
@@ -126,6 +128,21 @@ public partial class AreaOfThePremises : Form
         }));
 
         return table;
+    }
+
+    public void Fill()
+    {
+        ListOfPremises.CheckBoxes = true;
+        ListOfPremises.ShowLines = false;
+        ListOfPremises.Scrollable = true;
+        ListOfPremises.BorderStyle = BorderStyle.None;
+
+        for (var i = 0; i < 10; i++)
+        {
+            ListOfPremises.Nodes.Add("Родитель" + i.ToString());
+            ListOfPremises.Nodes[i].Nodes.Add("Ребенок 1");
+            ListOfPremises.Nodes[i].Nodes.Add("Ребенок 2");
+        }
     }
 
     Container СreateAKeypadForTheFirstColumn(MyButton[,] buttons)
