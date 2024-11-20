@@ -28,10 +28,15 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Text = "Form1";
+            SuspendLayout();
+            // 
+            // AreaOfThePremises
+            // 
+            AutoScaleMode = AutoScaleMode.None;
+            ClientSize = new Size(800, 450);
+            Name = "AreaOfThePremises";
+            Text = "Form1";
+            ResumeLayout(false);
         }
 
         #endregion

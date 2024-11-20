@@ -7,6 +7,7 @@ public partial class AreaOfThePremises : Form
 {
     private Container firstColumn;
     private Container secondColumn;
+    private readonly List<DropdownListForGrouping> groupingParameters;
     private readonly string[] HeadersOfGroupingControls = ["Группировать", "Затем по", "Затем по"];
     private MyButton SelectAllButton = new(margin: new Padding(4, 0, 10, 6)) { Text = "Выбрать все" };
     private MyButton ButtonRevealEverything = new(margin: new Padding(4, 0, 10, 6)) { Text = "Раскрыть все" };
@@ -14,7 +15,7 @@ public partial class AreaOfThePremises : Form
     private MyButton ButtonHideEverything = new(margin: new Padding(0, 0, 4, 6)) { Text = "Спрятать все" };
     private MyButton ButtonSettingCoefficient = new(margin: new Padding(0, 0, 5, 10)) { Text = "Настройка коэффициента" };
     private MyButton ButtonCalculate = new(margin: new Padding(0, 0, 5, 0)) { Text = "Посчитать" };
-    
+
     public AreaOfThePremises()
     {
         InitializeComponent();
@@ -25,6 +26,7 @@ public partial class AreaOfThePremises : Form
         Padding = new Padding(30, 22, 30, 20);
         FormBorderStyle = FormBorderStyle.Sizable;
 
+        groupingParameters = [];
         Controls.Add(CreatAGridOfElements());
 
         SizeChanged += ChangeMarginsOfMainColumns;
@@ -44,12 +46,12 @@ public partial class AreaOfThePremises : Form
         var table = new Container();
 
         table.Paint += TableOnBorderPaint;
-        
+
         table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
         table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
 
         table.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
-        
+
         firstColumn = CreateFirstColumn();
         table.Controls.Add(firstColumn, 0, 0);
         FillInTheFirstColumn(firstColumn);
@@ -86,15 +88,19 @@ public partial class AreaOfThePremises : Form
 
     private void FillInTheFirstColumn(Container table)
     {
-        foreach (var cell in CreateGroupingСontrols(HeadersOfGroupingControls))
-            table.Controls.Add(cell);
+        foreach (var dropdownList in HeadersOfGroupingControls
+            .Select(title => new DropdownListForGrouping(title)))
+        {
+            table.Controls.Add(dropdownList);
+            groupingParameters.Add(dropdownList);
+        }
 
         table.Controls.Add(CreateContainer());
     }
 
     private Container CreateContainer()
     {
-        var table = new Container 
+        var table = new Container
         {
             BackColor = ColorTranslator.FromHtml("#F5F6F8"),
             Padding = new Padding(0, 3, 0, 0),
@@ -105,7 +111,8 @@ public partial class AreaOfThePremises : Form
         table.RowStyles.Add(new RowStyle(SizeType.Percent, 21.18F));
         table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
 
-        table.Controls.Add(new Panel {
+        table.Controls.Add(new TreeView
+        {
             Dock = DockStyle.Fill,
             BackColor = Color.White,
             Padding = new Padding(0),
@@ -119,28 +126,6 @@ public partial class AreaOfThePremises : Form
         }));
 
         return table;
-    }
-
-    IEnumerable<Container> CreateGroupingСontrols(string[] titles)
-    {
-        for (var row = 0; row < 3; row++)
-        {
-            var cell = new Container 
-            { 
-                BackColor = Color.White,
-                Padding = new Padding(0, 0, 0, 8)
-            };
-            
-            cell.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
-            cell.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
-            cell.RowStyles.Add(new RowStyle(SizeType.Absolute, 20));
-
-            var list = new DropDownList();
-            cell.Controls.Add(new Heading(margin: new Padding(0, 4, 0, 1)) { Text = titles[row] }, 0, 0);
-            cell.Controls.Add(list, 0, 1);
-
-            yield return cell;
-        }
     }
 
     Container СreateAKeypadForTheFirstColumn(MyButton[,] buttons)
@@ -158,7 +143,7 @@ public partial class AreaOfThePremises : Form
                 table.Controls.Add(buttons[row, column], row, column);
             }
         }
-        
+
         return table;
     }
     #endregion
@@ -174,7 +159,7 @@ public partial class AreaOfThePremises : Form
             column.RowStyles.Add(new RowStyle(SizeType.Absolute, 49));
         column.RowStyles.Add(new RowStyle(SizeType.Absolute, 68));
         column.RowStyles.Add(new RowStyle(SizeType.Absolute, 49));
-        column.RowStyles.Add(new RowStyle(SizeType.Absolute, 20));
+        column.RowStyles.Add(new RowStyle(SizeType.Absolute, 23));
         column.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
         for (var i = 0; i < 2; i++)
             column.RowStyles.Add(new RowStyle(SizeType.Absolute, 38 - i * 10));
@@ -195,47 +180,24 @@ public partial class AreaOfThePremises : Form
             "Число комнат"
         };
 
-        foreach (var cell in CreateAParameterControlPanel(titles))
+        foreach (var cell in titles.Select(title => new DropdownList(title)))
             table.Controls.Add(cell);
         table.Controls.Add(CreateRoundingControls());
-        table.Controls.Add(new Panel 
+        table.Controls.Add(new Panel
         {
             Dock = DockStyle.Fill,
             BackColor = Color.White,
-            Padding = new Padding(0), 
-            Margin = new Padding(0) 
-        });  
+            Padding = new Padding(0),
+            Margin = new Padding(0)
+        });
         foreach (var cell in СreateAKeypadForTheSecondColumn())
             table.Controls.Add(cell);
-    }
-
-    IEnumerable<Container> CreateAParameterControlPanel(string[] titles)
-    {
-        for (var row = 0; row < 8; row++)
-        {
-            var table = new Container 
-            { 
-                BackColor = Color.White,
-                Padding = new Padding(0, 0, 0, 8)
-            };
-            table.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
-            table.RowStyles.Add(new RowStyle(SizeType.Absolute, 20));
-
-            table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
-            
-            table.Controls.Add(new Heading(margin: new Padding(0, 0, 0, 4)) { Text = titles[row] }, 0, 0);
-
-            var list = new DropDownList();
-            table.Controls.Add(list, 0, 1);
-
-            yield return table;
-        }
     }
 
     Container CreateRoundingControls()
     {
         var table = new Container { BackColor = Color.White };
-        
+
         table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50.71F));
         table.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 151));
         table.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 60));
@@ -244,13 +206,13 @@ public partial class AreaOfThePremises : Form
         table.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
 
         table.Controls.Add(new Panel { Dock = DockStyle.Fill }, 0, 0);
-        table.Controls.Add(new Heading(margin: new Padding(0)) { Text = "Знаков после запятой" }, 1, 0);
-        table.Controls.Add(new TextBox 
+        table.Controls.Add(new Heading { Text = "Знаков после запятой" }, 1, 0);
+        table.Controls.Add(new TextBox
         {
             Dock = DockStyle.Fill,
             BackColor = Color.White,
             ForeColor = ColorTranslator.FromHtml("#515254"),
-            Font = new Font("Inter", 11, FontStyle.Bold, GraphicsUnit.Pixel)
+            Font = new Font("Inter", 11, FontStyle.Bold, GraphicsUnit.Pixel),
         }, 2, 0);
         table.Controls.Add(new Panel { Dock = DockStyle.Fill }, 3, 0);
 
@@ -268,7 +230,7 @@ public partial class AreaOfThePremises : Form
         cell1.Controls.Add(ButtonSettingCoefficient, 1, 0);
 
         yield return cell1;
-        
+
         var cell2 = new Container { BackColor = Color.White };
         cell2.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
         cell2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
@@ -282,10 +244,10 @@ public partial class AreaOfThePremises : Form
 
     #region Меням цвет вехней рамки формы
     private string ToBgr(Color c) => $"{c.B:X2}{c.G:X2}{c.R:X2}";
-    
+
     [DllImport("DwmApi")]
     private static extern int DwmSetWindowAttribute(IntPtr hwnd, int attr, int[] attrValue, int attrSize);
-    
+
     const int DWWMA_CAPTION_COLOR = 35;
     public void CustomWindow(Color captionColor, IntPtr handle)
     {
