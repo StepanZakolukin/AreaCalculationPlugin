@@ -12,11 +12,4 @@
     <Folder Include="Calculator\" />
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="ComponentFactory.Krypton.Toolkit" Version="1.0.0" />
-    <PackageReference Include="Krypton.Toolkit" Version="85.24.10.288" />
-    <PackageReference Include="Krypton.Toolkit.Suite.Extended.Navi.Suite" Version="85.24.10.288" />
-    <PackageReference Include="Krypton.Workspace" Version="85.24.10.288" />
-  </ItemGroup>
-
 </Project>

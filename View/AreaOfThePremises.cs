@@ -1,16 +1,19 @@
 using System.Runtime.InteropServices;
+using AreaCalculationPlugin.View.Controls;
 
 namespace AreaCalculationPlugin.View;
 
 public partial class AreaOfThePremises : Form
 {
-    private TableLayoutPanel GridOfElements;
-    private Button SelectAllButton = new() { Text = "Выбрать все" };
-    private Button ButtonRevealEverything = new() { Text = "Раскрыть все" };
-    private Button ButtonThrowOff = new() { Text = "Сбросить" };
-    private Button ButtonHideEverything = new() { Text = "Спрятать все" };
-    private Button ButtonSettingCoefficient = new() { Text = "Настройка коэффициента" };
-    private Button ButtonCalculate = new() { Text = "Посчитать" };
+    private Container firstColumn;
+    private Container secondColumn;
+    private readonly string[] HeadersOfGroupingControls = ["Группировать", "Затем по", "Затем по"];
+    private MyButton SelectAllButton = new(margin: new Padding(4, 0, 10, 6)) { Text = "Выбрать все" };
+    private MyButton ButtonRevealEverything = new(margin: new Padding(4, 0, 10, 6)) { Text = "Раскрыть все" };
+    private MyButton ButtonThrowOff = new(margin: new Padding(0, 0, 4, 6)) { Text = "Сбросить" };
+    private MyButton ButtonHideEverything = new(margin: new Padding(0, 0, 4, 6)) { Text = "Спрятать все" };
+    private MyButton ButtonSettingCoefficient = new(margin: new Padding(0, 0, 5, 10)) { Text = "Настройка коэффициента" };
+    private MyButton ButtonCalculate = new(margin: new Padding(0, 0, 5, 0)) { Text = "Посчитать" };
     
     public AreaOfThePremises()
     {
@@ -22,36 +25,46 @@ public partial class AreaOfThePremises : Form
         Padding = new Padding(30, 22, 30, 20);
         FormBorderStyle = FormBorderStyle.Sizable;
 
-        GridOfElements = CreatAGridOfElements();
+        Controls.Add(CreatAGridOfElements());
+
+        SizeChanged += ChangeMarginsOfMainColumns;
+        ChangeMarginsOfMainColumns(null, null);
     }
 
-    TableLayoutPanel CreatAGridOfElements()
+    private void ChangeMarginsOfMainColumns(object? sender, EventArgs e)
     {
-        var table = new TableLayoutPanel
-        {
-            Dock = DockStyle.Fill,
-            Margin = new Padding(0),
-            Padding = new Padding(10)
-        };
+        var margin = (int)(16.02 / 768.96 * firstColumn.Height);
+
+        firstColumn.Margin = new Padding(margin);
+        secondColumn.Margin = firstColumn.Margin;
+    }
+
+    Container CreatAGridOfElements()
+    {
+        var table = new Container();
 
         table.Paint += TableOnBorderPaint;
-        Controls.Add(table);
         
         table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
         table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
 
         table.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
         
-        table.Controls.Add(CreateFirstColumn(), 0, 0);
-        table.Controls.Add(CreateSecondColumn(), 1, 0);
-        
+        firstColumn = CreateFirstColumn();
+        table.Controls.Add(firstColumn, 0, 0);
+        FillInTheFirstColumn(firstColumn);
+
+        secondColumn = CreateSecondColumn();
+        table.Controls.Add(secondColumn, 1, 0);
+        FillSecondColumn(secondColumn);
+
         return table;
     }
 
     private void TableOnBorderPaint(object? sender, PaintEventArgs e)
     {
         var borderSize = 3;
-        var table = sender as TableLayoutPanel;
+        var table = sender as Container;
 
         e.Graphics.CreateARoundedRectangle(pen: new Pen(ColorTranslator.FromHtml("#EEEEEE"), borderSize),
             size: new Size(table.Size.Width - 2 * borderSize, table.Size.Height - 2 * borderSize),
@@ -60,46 +73,44 @@ public partial class AreaOfThePremises : Form
     }
 
     #region Первая колонка
-    private TableLayoutPanel CreateFirstColumn()
+    private Container CreateFirstColumn()
     {
-        var firstColumn = new TableLayoutPanel
-        {
-            Dock = DockStyle.Fill,
-            Margin = new Padding(0),
-            Padding = new Padding(0),
-        };
+        var column = new Container();
 
         for (var i = 0; i < 3; i++)
-            firstColumn.RowStyles.Add(new RowStyle(SizeType.Absolute, 42));
-        firstColumn.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
+            column.RowStyles.Add(new RowStyle(SizeType.Absolute, 50));
+        column.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
 
-        FillInTheFirstColumn(firstColumn);
-
-        return firstColumn;
+        return column;
     }
 
-    private void FillInTheFirstColumn(TableLayoutPanel table)
+    private void FillInTheFirstColumn(Container table)
     {
-        foreach (var cell in CreateGroupingСontrols(new[] { "Группировать", "Затем по", "Затем по"}))
+        foreach (var cell in CreateGroupingСontrols(HeadersOfGroupingControls))
             table.Controls.Add(cell);
 
         table.Controls.Add(CreateContainer());
     }
 
-    private TableLayoutPanel CreateContainer()
+    private Container CreateContainer()
     {
-        var table = new TableLayoutPanel
+        var table = new Container 
         {
-            Dock = DockStyle.Fill,
-            Padding = new Padding(0),
-            Margin = new Padding(0),
+            BackColor = ColorTranslator.FromHtml("#F5F6F8"),
+            Padding = new Padding(0, 3, 0, 0),
+            Margin = new Padding(0, 4, 0, 0)
         };
 
         table.RowStyles.Add(new RowStyle(SizeType.Percent, 78.82F));
         table.RowStyles.Add(new RowStyle(SizeType.Percent, 21.18F));
         table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
 
-        table.Controls.Add(new Panel { Dock = DockStyle.Fill, BackColor = Color.White });
+        table.Controls.Add(new Panel {
+            Dock = DockStyle.Fill,
+            BackColor = Color.White,
+            Padding = new Padding(0),
+            Margin = new Padding(6, 0, 6, 5)
+        });
 
         table.Controls.Add(СreateAKeypadForTheFirstColumn(new[,]
         {
@@ -110,27 +121,31 @@ public partial class AreaOfThePremises : Form
         return table;
     }
 
-    IEnumerable<TableLayoutPanel> CreateGroupingСontrols(string[] titles)
+    IEnumerable<Container> CreateGroupingСontrols(string[] titles)
     {
         for (var row = 0; row < 3; row++)
         {
-            var cell = new TableLayoutPanel { Dock = DockStyle.Fill, BackColor = Color.White };
+            var cell = new Container 
+            { 
+                BackColor = Color.White,
+                Padding = new Padding(0, 0, 0, 8)
+            };
             
             cell.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
-            cell.RowStyles.Add(new RowStyle(SizeType.Percent, 50));
-            cell.RowStyles.Add(new RowStyle(SizeType.Percent, 50));
+            cell.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
+            cell.RowStyles.Add(new RowStyle(SizeType.Absolute, 20));
 
-            var list = new ComboBox { Dock = DockStyle.Fill, BackColor = Color.White };
-            cell.Controls.Add(new Label { Dock = DockStyle.Fill, Text = titles[row] }, 0, 0);
+            var list = new DropDownList();
+            cell.Controls.Add(new Heading(margin: new Padding(0, 4, 0, 1)) { Text = titles[row] }, 0, 0);
             cell.Controls.Add(list, 0, 1);
 
             yield return cell;
         }
     }
 
-    TableLayoutPanel СreateAKeypadForTheFirstColumn(Button[,] buttons)
+    Container СreateAKeypadForTheFirstColumn(MyButton[,] buttons)
     {
-        var table = new TableLayoutPanel { Dock = DockStyle.Fill, BackColor = Color.White };
+        var table = new Container { BackColor = ColorTranslator.FromHtml("#F5F6F8") };
         table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
         table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
         table.RowStyles.Add(new RowStyle(SizeType.Percent, 50));
@@ -140,7 +155,6 @@ public partial class AreaOfThePremises : Form
         {
             for (var column = 0; column < 2; column++)
             {
-                buttons[row, column].Dock = DockStyle.Fill;
                 table.Controls.Add(buttons[row, column], row, column);
             }
         }
@@ -150,32 +164,25 @@ public partial class AreaOfThePremises : Form
     #endregion
 
     #region Вторая колонка
-    private TableLayoutPanel CreateSecondColumn()
+    private Container CreateSecondColumn()
     {
-        var secondColumn = new TableLayoutPanel
-        {
-            Dock = DockStyle.Fill,
-            Padding = new Padding(0),
-            Margin = new Padding(0)
-        };
+        var column = new Container();
 
-        secondColumn.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+        column.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
 
         for (var i = 0; i < 6; i++)
-            secondColumn.RowStyles.Add(new RowStyle(SizeType.Absolute, 42));
-        secondColumn.RowStyles.Add(new RowStyle(SizeType.Absolute, 60));
-        secondColumn.RowStyles.Add(new RowStyle(SizeType.Absolute, 42));
-        secondColumn.RowStyles.Add(new RowStyle(SizeType.Absolute, 20));
-        secondColumn.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
+            column.RowStyles.Add(new RowStyle(SizeType.Absolute, 49));
+        column.RowStyles.Add(new RowStyle(SizeType.Absolute, 68));
+        column.RowStyles.Add(new RowStyle(SizeType.Absolute, 49));
+        column.RowStyles.Add(new RowStyle(SizeType.Absolute, 20));
+        column.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
         for (var i = 0; i < 2; i++)
-            secondColumn.RowStyles.Add(new RowStyle(SizeType.Absolute, 28));
-        
-        FillSecondColumn(secondColumn);
+            column.RowStyles.Add(new RowStyle(SizeType.Absolute, 38 - i * 10));
 
-        return secondColumn;
+        return column;
     }
 
-    void FillSecondColumn(TableLayoutPanel table)
+    void FillSecondColumn(Container table)
     {
         var titles = new[] {
             "Параметр номера квартиры",
@@ -191,67 +198,82 @@ public partial class AreaOfThePremises : Form
         foreach (var cell in CreateAParameterControlPanel(titles))
             table.Controls.Add(cell);
         table.Controls.Add(CreateRoundingControls());
-        table.Controls.Add(new Panel { Dock = DockStyle.Fill, BackColor = Color.White });  
+        table.Controls.Add(new Panel 
+        {
+            Dock = DockStyle.Fill,
+            BackColor = Color.White,
+            Padding = new Padding(0), 
+            Margin = new Padding(0) 
+        });  
         foreach (var cell in СreateAKeypadForTheSecondColumn())
             table.Controls.Add(cell);
     }
 
-    IEnumerable<TableLayoutPanel> CreateAParameterControlPanel(string[] titles)
+    IEnumerable<Container> CreateAParameterControlPanel(string[] titles)
     {
         for (var row = 0; row < 8; row++)
         {
-            var table = new TableLayoutPanel { Dock = DockStyle.Fill, BackColor = Color.White };
-            table.RowStyles.Add(new RowStyle(SizeType.Percent, 50));
-            table.RowStyles.Add(new RowStyle(SizeType.Percent, 50));
+            var table = new Container 
+            { 
+                BackColor = Color.White,
+                Padding = new Padding(0, 0, 0, 8)
+            };
+            table.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
+            table.RowStyles.Add(new RowStyle(SizeType.Absolute, 20));
+
             table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
             
-            table.Controls.Add(new Label { Dock = DockStyle.Fill, Text = titles[row] }, 0, 0);
+            table.Controls.Add(new Heading(margin: new Padding(0, 0, 0, 4)) { Text = titles[row] }, 0, 0);
 
-            var list = new ComboBox { Dock = DockStyle.Fill, BackColor = Color.White };
+            var list = new DropDownList();
             table.Controls.Add(list, 0, 1);
 
             yield return table;
         }
     }
 
-    TableLayoutPanel CreateRoundingControls()
+    Container CreateRoundingControls()
     {
-        var table = new TableLayoutPanel { Dock = DockStyle.Fill, BackColor = Color.White };
+        var table = new Container { BackColor = Color.White };
         
         table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50.71F));
-        table.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 150));
+        table.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 151));
         table.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 60));
         table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 49.29F));
 
         table.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
 
         table.Controls.Add(new Panel { Dock = DockStyle.Fill }, 0, 0);
-        table.Controls.Add(new Label { Dock = DockStyle.Fill, Text = "Знаков после запятой" }, 1, 0);
-        table.Controls.Add(new TextBox { Dock = DockStyle.Fill, BackColor = Color.White }, 2, 0);
+        table.Controls.Add(new Heading(margin: new Padding(0)) { Text = "Знаков после запятой" }, 1, 0);
+        table.Controls.Add(new TextBox 
+        {
+            Dock = DockStyle.Fill,
+            BackColor = Color.White,
+            ForeColor = ColorTranslator.FromHtml("#515254"),
+            Font = new Font("Inter", 11, FontStyle.Bold, GraphicsUnit.Pixel)
+        }, 2, 0);
         table.Controls.Add(new Panel { Dock = DockStyle.Fill }, 3, 0);
 
         return table;
     }
 
-    private IEnumerable<TableLayoutPanel> СreateAKeypadForTheSecondColumn()
+    private IEnumerable<Container> СreateAKeypadForTheSecondColumn()
     {
-        var cell1 = new TableLayoutPanel { Dock = DockStyle.Fill, BackColor = Color.White };
+        var cell1 = new Container { BackColor = Color.White };
         cell1.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
         cell1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
         cell1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 150));
 
         cell1.Controls.Add(new Panel { Dock = DockStyle.Fill, BackColor = Color.White }, 0, 0);
-        ButtonSettingCoefficient.Dock = DockStyle.Fill;
         cell1.Controls.Add(ButtonSettingCoefficient, 1, 0);
 
         yield return cell1;
         
-        var cell2 = new TableLayoutPanel { Dock = DockStyle.Fill, BackColor = Color.White };
+        var cell2 = new Container { BackColor = Color.White };
         cell2.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
         cell2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
         cell2.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 130));
         cell2.Controls.Add(new Panel { Dock = DockStyle.Fill, BackColor = Color.White }, 0, 0);
-        ButtonCalculate.Dock = DockStyle.Fill;
         cell2.Controls.Add(ButtonCalculate, 1, 0);
 
         yield return cell2;
