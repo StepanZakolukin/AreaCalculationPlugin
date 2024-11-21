@@ -2,20 +2,20 @@
 
 public class Heading : Label
 {
-    public Heading()
+    public Heading(int fontSize = 14, FontStyle fontStyle = FontStyle.Regular)
     {
-        InitializeComponent();
+        InitializeComponent(fontSize, fontStyle);
     }
 
-    public Heading(string text)
+    public Heading(string text, int fontSize = 14, FontStyle fontStyle = FontStyle.Regular)
     {
         Text = text;
-        InitializeComponent();
+        InitializeComponent(fontSize, fontStyle);
     }
 
-    private void InitializeComponent()
+    private void InitializeComponent(int fontSize, FontStyle fontStyle)
     {
-        Font = new Font("Inter", 14, FontStyle.Regular, GraphicsUnit.Pixel);
+        Font = new Font("Inter", fontSize, fontStyle, GraphicsUnit.Pixel);
         Dock = DockStyle.Fill;
         Margin = new Padding(0);
         Padding = new Padding(0);

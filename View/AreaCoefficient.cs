@@ -13,8 +13,14 @@ internal class AreaCoefficient : Container
 
     public AreaCoefficient(string name, double coefficient = 1) : base()
     {
-        Name = new(name);
-        Coefficient = new() { Text = coefficient.ToString() };
+        Name = new(name, fontSize: 11, FontStyle.Bold);
+        Coefficient = new() {
+            Text = coefficient.ToString(),
+            Font = new Font("Inter",
+            11,
+            FontStyle.Bold,
+            GraphicsUnit.Pixel) 
+        };
         ButtonToIncreaseValue = new();
         DecreaseValueButton = new();
 
