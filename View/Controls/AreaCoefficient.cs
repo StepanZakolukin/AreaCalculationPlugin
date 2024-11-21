@@ -1,6 +1,4 @@
-﻿using AreaCalculationPlugin.View.Controls;
-
-namespace AreaCalculationPlugin.View;
+﻿namespace AreaCalculationPlugin.View.Controls;
 
 internal class AreaCoefficient : Container
 {
@@ -14,12 +12,13 @@ internal class AreaCoefficient : Container
     public AreaCoefficient(string name, double coefficient = 1) : base(Color.White)
     {
         Name = new(name, fontSize: 11, FontStyle.Bold);
-        Coefficient = new() {
+        Coefficient = new()
+        {
             Text = coefficient.ToString(),
             Font = new Font("Inter",
             11,
             FontStyle.Bold,
-            GraphicsUnit.Pixel) 
+            GraphicsUnit.Pixel)
         };
         ButtonToIncreaseValue = new();
         DecreaseValueButton = new();
@@ -52,8 +51,8 @@ internal class AreaCoefficient : Container
         ButtonToIncreaseValue.Click += IncreaseValue;
         Coefficient.TextChanged += DisplayStatusOfTheValueChange;
 
-        CoefficientHasBeenChanged += (bool correct) => ButtonToIncreaseValue.Enabled = correct;
-        CoefficientHasBeenChanged += (bool correct) => DecreaseValueButton.Enabled = correct;
+        CoefficientHasBeenChanged += (correct) => ButtonToIncreaseValue.Enabled = correct;
+        CoefficientHasBeenChanged += (correct) => DecreaseValueButton.Enabled = correct;
     }
 
     private void DisplayStatusOfTheValueChange(object? sender, EventArgs e)

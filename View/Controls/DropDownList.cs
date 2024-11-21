@@ -1,6 +1,4 @@
-﻿using System.Windows.Forms;
-
-namespace AreaCalculationPlugin.View.Controls;
+﻿namespace AreaCalculationPlugin.View.Controls;
 
 public class DropdownList : Container
 {
