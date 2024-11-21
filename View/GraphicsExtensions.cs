@@ -2,6 +2,20 @@
 
 public static class GraphicsExtensions
 {
+    public static void FillRoundedRectangle(this Graphics graphics, Color backColor, Color borderColor,
+        int borderSize, Rectangle rectangle, int radius)
+    {
+        graphics.FillRoundedRectangle(brush: new SolidBrush(backColor),
+            new Rectangle(borderSize, borderSize, rectangle.Size.Width - 2 * borderSize,
+            rectangle.Size.Height - 2 * borderSize),
+            radius: radius);
+
+        graphics.RoundedRectangle(pen: new Pen(borderColor, borderSize),
+            new Rectangle(borderSize, borderSize, rectangle.Size.Width - 2 * borderSize,
+            rectangle.Size.Height - 2 * borderSize),
+            radius: radius);
+    }
+
     public static void FillRoundedRectangle(this Graphics graphics, Brush brush, Rectangle rectangle, int radius)
     {
         graphics.DrawCornersForFillRoundedRectangle(brush, radius, rectangle);

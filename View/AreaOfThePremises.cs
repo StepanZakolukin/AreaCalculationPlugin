@@ -7,15 +7,20 @@ public partial class AreaOfThePremises : Form
     private Container firstColumn;
     private Container secondColumn;
     private readonly TreeView ListOfPremises;
+    private readonly TextBox NumberOfDecimalPlaces;
     private readonly List<DropdownListForGrouping> groupingParameters;
 
     private readonly string[] HeadersOfGroupingControls = ["Группировать", "Затем по", "Затем по"];
-    private MyButton SelectAllButton = new(margin: new Padding(4, 0, 10, 6)) { Text = "Выбрать все" };
-    private MyButton ButtonRevealEverything = new(margin: new Padding(4, 0, 10, 6)) { Text = "Раскрыть все" };
-    private MyButton ButtonThrowOff = new(margin: new Padding(0, 0, 4, 6)) { Text = "Сбросить" };
-    private MyButton ButtonHideEverything = new(margin: new Padding(0, 0, 4, 6)) { Text = "Спрятать все" };
+    private MyButton SelectAllButton = new(margin: new Padding(0, 0, 5, 5)) { Text = "Выбрать все" };
+    private MyButton ButtonRevealEverything = new(margin: new Padding(0, 5, 5, 0)) { Text = "Раскрыть все" };
+    private MyButton ButtonThrowOff = new(margin: new Padding(5, 0, 0, 5)) { Text = "Сбросить" };
+    private MyButton ButtonHideEverything = new(margin: new Padding(5, 5, 0, 0)) { Text = "Спрятать все" };
     private MyButton ButtonSettingCoefficient = new(margin: new Padding(0, 0, 5, 10)) { Text = "Настройка коэффициента" };
-    private MyButton ButtonCalculate = new(margin: new Padding(0, 0, 5, 0)) { Text = "Посчитать" };
+    private MyButton ButtonCalculate = new(margin: new Padding(0, 0, 5, 0))
+    { 
+        Text = "Посчитать",
+        BackColor = ColorTranslator.FromHtml("#EFE650")
+    };
 
     public AreaOfThePremises()
     {
@@ -27,13 +32,25 @@ public partial class AreaOfThePremises : Form
         Padding = new Padding(30, 22, 30, 20);
         FormBorderStyle = FormBorderStyle.Sizable;
 
+        NumberOfDecimalPlaces = new()
+        {
+            Dock = DockStyle.Fill,
+            BackColor = Color.White,
+            ForeColor = ColorTranslator.FromHtml("#515254"),
+            Font = new Font("Inter", 11, FontStyle.Bold, GraphicsUnit.Pixel)
+        };
         groupingParameters = [];
         ListOfPremises = new TreeView();
         Fill();
         Controls.Add(CreatAGridOfElements());
 
-        SizeChanged += ChangeMarginsOfMainColumns;
+
         ChangeMarginsOfMainColumns(null, null);
+    }
+
+    private void SubscribeToEvents()
+    {
+        SizeChanged += ChangeMarginsOfMainColumns;
     }
 
     private void ChangeMarginsOfMainColumns(object? sender, EventArgs e)
@@ -47,8 +64,7 @@ public partial class AreaOfThePremises : Form
     Container CreatAGridOfElements()
     {
         var table = new Container(ColorTranslator.FromHtml("#F5F6F8"));
-
-        table.Paint += TableOnBorderPaint;
+        table.Paint += MainTableOnBackgroundPaint;
 
         table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
         table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
@@ -66,21 +82,20 @@ public partial class AreaOfThePremises : Form
         return table;
     }
 
-    private void TableOnBorderPaint(object? sender, PaintEventArgs e)
+    private void MainTableOnBackgroundPaint(object? sender, PaintEventArgs e)
     {
-        var borderSize = 3;
         var table = sender as Container;
         var graphics = e.Graphics;
 
-        graphics.FillRoundedRectangle(brush: Brushes.White,
-            new Rectangle(borderSize, borderSize, table.Size.Width - 2 * borderSize,
-            table.Size.Height - 2 * borderSize),
+        graphics.FillRoundedRectangle(Color.White,
+            ColorTranslator.FromHtml("#EEEEEE"),
+            borderSize: 3,
+            new Rectangle(
+                new Point(0, 0),
+                new Size(table.Width, table.Height)),
             radius: 10);
 
-        graphics.RoundedRectangle(pen: new Pen(ColorTranslator.FromHtml("#EEEEEE"), borderSize),
-            new Rectangle(borderSize, borderSize, table.Size.Width - 2 * borderSize,
-            table.Size.Height - 2 * borderSize),
-            radius: 10);
+        graphics.Dispose();
     }
 
     #region Первая колонка
@@ -109,11 +124,12 @@ public partial class AreaOfThePremises : Form
 
     private Container CreateContainer()
     {
-        var table = new Container(ColorTranslator.FromHtml("#F5F6F8"))
+        var table = new Container(Color.White)
         {
-            Padding = new Padding(0, 3, 0, 0),
+            Padding = new Padding(4, 4, 4, 6),
             Margin = new Padding(0, 4, 0, 0)
         };
+        table.Paint += DrawBackgroundOfControlUnit;
 
         table.RowStyles.Add(new RowStyle(SizeType.Percent, 78.82F));
         table.RowStyles.Add(new RowStyle(SizeType.Percent, 21.18F));
@@ -123,7 +139,7 @@ public partial class AreaOfThePremises : Form
         ListOfPremises.Dock = DockStyle.Fill;
         ListOfPremises.BackColor = Color.White;
         ListOfPremises.Padding = new Padding(0);
-        ListOfPremises.Margin = new Padding(6, 0, 6, 5);
+        ListOfPremises.Margin = new Padding(5, 5, 5, 5);
 
         table.Controls.Add(СreateAKeypadForTheFirstColumn(new[,]
         {
@@ -132,6 +148,19 @@ public partial class AreaOfThePremises : Form
         }));
 
         return table;
+    }
+
+    private void DrawBackgroundOfControlUnit(object? sender, PaintEventArgs e)
+    {
+        var table = sender as Container;
+        var graphics = e.Graphics;
+
+        graphics.FillRoundedRectangle(brush: new SolidBrush(ColorTranslator.FromHtml("#F5F6F8")),
+            new Rectangle(0, 0, table.Size.Width,
+            table.Size.Height),
+            radius: 10);
+
+        graphics.Dispose();
     }
 
     public void Fill()
@@ -158,12 +187,8 @@ public partial class AreaOfThePremises : Form
         table.RowStyles.Add(new RowStyle(SizeType.Percent, 50));
 
         for (var row = 0; row < 2; row++)
-        {
             for (var column = 0; column < 2; column++)
-            {
                 table.Controls.Add(buttons[row, column], row, column);
-            }
-        }
 
         return table;
     }
@@ -228,13 +253,8 @@ public partial class AreaOfThePremises : Form
 
         table.Controls.Add(new Panel { Dock = DockStyle.Fill }, 0, 0);
         table.Controls.Add(new Heading { Text = "Знаков после запятой" }, 1, 0);
-        table.Controls.Add(new TextBox
-        {
-            Dock = DockStyle.Fill,
-            BackColor = Color.White,
-            ForeColor = ColorTranslator.FromHtml("#515254"),
-            Font = new Font("Inter", 11, FontStyle.Bold, GraphicsUnit.Pixel),
-        }, 2, 0);
+        
+        table.Controls.Add(NumberOfDecimalPlaces, 2, 0);
         table.Controls.Add(new Panel { Dock = DockStyle.Fill }, 3, 0);
 
         return table;

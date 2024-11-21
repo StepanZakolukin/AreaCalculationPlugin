@@ -1,4 +1,6 @@
-﻿namespace AreaCalculationPlugin.View.Controls;
+﻿using System.Windows.Forms;
+
+namespace AreaCalculationPlugin.View.Controls;
 
 public class DropdownList : Container
 {
@@ -34,7 +36,7 @@ public class DropdownList : Container
         comboBox.BackColor = ColorTranslator.FromHtml("#F5F6F8");
         comboBox.ForeColor = ColorTranslator.FromHtml("#515254");
         comboBox.Font = new Font("Inter", 13, FontStyle.Bold, GraphicsUnit.Pixel);
-        comboBox.FlatStyle = FlatStyle.Flat; //Элемент плоский
+        comboBox.FlatStyle = FlatStyle.Flat;
     }
 
     public void Add(Control control)
