@@ -71,9 +71,9 @@ public partial class AreaOfThePremises : Form
         var borderSize = 3;
         var table = sender as Container;
 
-        e.Graphics.CreateARoundedRectangle(pen: new Pen(ColorTranslator.FromHtml("#EEEEEE"), borderSize),
-            size: new Size(table.Size.Width - 2 * borderSize, table.Size.Height - 2 * borderSize),
-            point: new Point(borderSize, borderSize),
+        e.Graphics.CreateRoundedRectangle(pen: new Pen(ColorTranslator.FromHtml("#EEEEEE"), borderSize),
+            new Rectangle(borderSize, borderSize, table.Size.Width - 2 * borderSize,
+            table.Size.Height - 2 * borderSize),
             radius: 10);
     }
 

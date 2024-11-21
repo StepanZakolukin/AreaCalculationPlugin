@@ -2,31 +2,53 @@
 
 public static class GraphicsExtensions
 {
-    public static void CreateARoundedRectangle(this Graphics graphics, Pen pen, Size size, Point point, int radius)
+    public static void CreateRoundedRectangle(this Graphics graphics, Pen pen, Rectangle rectangle, int radius)
     {
+        // рисует верхнюю и нижнюю сторону прямоугольника
         for (var i = 0; i < 2; i++)
         {
-            graphics.DrawLine(pen, new Point(point.X + radius, point.Y + size.Height * i),
-                new Point(point.X - radius + size.Width, point.Y + size.Height * i));
+            var y = rectangle.Location.Y + rectangle.Size.Height * i;
+
+            graphics.DrawLine(pen,
+                new Point(rectangle.Location.X + radius, y),
+                new Point(rectangle.Location.X - radius + rectangle.Size.Width, y));
         }
 
+        // рисует левую и правую сторону прямоугольника
         for (var i = 0; i < 2; i++)
         {
-            graphics.DrawLine(pen, new Point(point.X + size.Width * i, point.Y + radius),
-                new Point(point.X + size.Width * i, point.Y + size.Height - radius));
+            var x = rectangle.Location.X + rectangle.Size.Width * i;
+
+            graphics.DrawLine(pen,
+                new Point(x, rectangle.Location.Y + radius),
+                new Point(x, rectangle.Location.Y + rectangle.Size.Height - radius));
         }
 
-        DrawTheCorners(graphics, pen, size, point, radius);
+        DrawRoundedCorners(graphics, pen, rectangle, radius);
     }
 
-    private static void DrawTheCorners(Graphics graphics, Pen pen, Size size, Point point, int radius)
+    private static void DrawRoundedCorners(Graphics graphics, Pen pen, Rectangle rectangle, int radius)
     {
-        graphics.DrawArc(pen, new Rectangle(point, new Size(2 * radius, 2 * radius)), 180, 90);
-        graphics.DrawArc(pen, new Rectangle(new Point(point.X - 2 * radius + size.Width, point.Y),
-        new Size(2 * radius, 2 * radius)), 268, 94);
-        graphics.DrawArc(pen, new Rectangle(new Point(point.X - 2 * radius + size.Width, point.Y + size.Height - 2 * radius),
-        new Size(2 * radius, 2 * radius)), -2, 94);
-        graphics.DrawArc(pen, new Rectangle(new Point(point.X + radius - radius, point.Y + size.Height - 2 * radius),
-            new Size(2 * radius, 2 * radius)), 88, 94);
+        var diameterOfCircle = 2 * radius;
+        var rectangles = CreateSetOfRectanglesToRoundCorners(diameterOfCircle, rectangle);
+        
+        for (var i = 0; i < 4; i++)
+            graphics.DrawArc(pen, rectangles[i], i * 90, 94);
+    }
+
+    private static List<Rectangle> CreateSetOfRectanglesToRoundCorners(int diameterOfCircle, Rectangle rectangle)
+    {
+        var sizeOfBoundingRect = new Size(diameterOfCircle, diameterOfCircle);
+        var YValueForRightSide = rectangle.Location.Y + rectangle.Size.Height - diameterOfCircle;
+        var XValueForBottomSide = rectangle.Location.X - diameterOfCircle + rectangle.Size.Width;
+
+        return
+        [
+            new Rectangle(new Point(XValueForBottomSide, YValueForRightSide), sizeOfBoundingRect),
+            new Rectangle(new Point(rectangle.Location.X, YValueForRightSide), sizeOfBoundingRect),
+            new Rectangle(rectangle.Location, sizeOfBoundingRect),
+            new Rectangle(new Point(XValueForBottomSide, rectangle.Location.Y), sizeOfBoundingRect),
+        ];
+        throw new NotImplementedException();
     }
 }
