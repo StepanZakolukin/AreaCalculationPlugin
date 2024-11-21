@@ -48,7 +48,7 @@ internal class SettingСoefficient : Form
 
     private Container CreateCoefficientAdjustmentTable()
     {
-        var cell = new Container
+        var cell = new Container(Color.White)
         {
             Padding = new Padding(10, 5, 10, 1)
         };

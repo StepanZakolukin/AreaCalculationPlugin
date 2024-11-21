@@ -11,7 +11,7 @@ internal class AreaCoefficient : Container
     private const double Delta = 0.1;
     public event Action<bool> CoefficientHasBeenChanged;
 
-    public AreaCoefficient(string name, double coefficient = 1) : base()
+    public AreaCoefficient(string name, double coefficient = 1) : base(Color.White)
     {
         Name = new(name, fontSize: 11, FontStyle.Bold);
         Coefficient = new() {

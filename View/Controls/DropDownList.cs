@@ -7,7 +7,7 @@ public class DropdownList : Container
     
     private ComboBox Items { get; set; }
 
-    public DropdownList(string name) : base()
+    public DropdownList(string name) : base(Color.White)
     {
         title = new Heading
         {

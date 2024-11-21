@@ -46,7 +46,7 @@ public partial class AreaOfThePremises : Form
 
     Container CreatAGridOfElements()
     {
-        var table = new Container();
+        var table = new Container(ColorTranslator.FromHtml("#F5F6F8"));
 
         table.Paint += TableOnBorderPaint;
 
@@ -70,8 +70,14 @@ public partial class AreaOfThePremises : Form
     {
         var borderSize = 3;
         var table = sender as Container;
+        var graphics = e.Graphics;
 
-        e.Graphics.CreateRoundedRectangle(pen: new Pen(ColorTranslator.FromHtml("#EEEEEE"), borderSize),
+        graphics.FillRoundedRectangle(brush: Brushes.White,
+            new Rectangle(borderSize, borderSize, table.Size.Width - 2 * borderSize,
+            table.Size.Height - 2 * borderSize),
+            radius: 10);
+
+        graphics.RoundedRectangle(pen: new Pen(ColorTranslator.FromHtml("#EEEEEE"), borderSize),
             new Rectangle(borderSize, borderSize, table.Size.Width - 2 * borderSize,
             table.Size.Height - 2 * borderSize),
             radius: 10);
@@ -80,7 +86,7 @@ public partial class AreaOfThePremises : Form
     #region Первая колонка
     private Container CreateFirstColumn()
     {
-        var column = new Container();
+        var column = new Container(Color.White);
 
         for (var i = 0; i < 3; i++)
             column.RowStyles.Add(new RowStyle(SizeType.Absolute, 50));
@@ -103,9 +109,8 @@ public partial class AreaOfThePremises : Form
 
     private Container CreateContainer()
     {
-        var table = new Container
+        var table = new Container(ColorTranslator.FromHtml("#F5F6F8"))
         {
-            BackColor = ColorTranslator.FromHtml("#F5F6F8"),
             Padding = new Padding(0, 3, 0, 0),
             Margin = new Padding(0, 4, 0, 0)
         };
@@ -146,7 +151,7 @@ public partial class AreaOfThePremises : Form
 
     Container СreateAKeypadForTheFirstColumn(MyButton[,] buttons)
     {
-        var table = new Container { BackColor = ColorTranslator.FromHtml("#F5F6F8") };
+        var table = new Container(ColorTranslator.FromHtml("#F5F6F8"));
         table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
         table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
         table.RowStyles.Add(new RowStyle(SizeType.Percent, 50));
@@ -167,7 +172,7 @@ public partial class AreaOfThePremises : Form
     #region Вторая колонка
     private Container CreateSecondColumn()
     {
-        var column = new Container();
+        var column = new Container(Color.White);
 
         column.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
 
@@ -183,7 +188,7 @@ public partial class AreaOfThePremises : Form
         return column;
     }
 
-    void FillSecondColumn(Container table)
+    private void FillSecondColumn(Container table)
     {
         var titles = new[] {
             "Параметр номера квартиры",
@@ -212,7 +217,7 @@ public partial class AreaOfThePremises : Form
 
     Container CreateRoundingControls()
     {
-        var table = new Container { BackColor = Color.White };
+        var table = new Container(Color.White);
 
         table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50.71F));
         table.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 151));
@@ -237,7 +242,7 @@ public partial class AreaOfThePremises : Form
 
     private IEnumerable<Container> СreateAKeypadForTheSecondColumn()
     {
-        var cell1 = new Container { BackColor = Color.White };
+        var cell1 = new Container(Color.White);
         cell1.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
         cell1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
         cell1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 150));
@@ -247,7 +252,7 @@ public partial class AreaOfThePremises : Form
 
         yield return cell1;
 
-        var cell2 = new Container { BackColor = Color.White };
+        var cell2 = new Container(Color.White);
         cell2.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
         cell2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
         cell2.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 130));

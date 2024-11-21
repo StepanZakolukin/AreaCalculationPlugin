@@ -5,7 +5,6 @@ public class Container : TableLayoutPanel
     public Container()
     {
         InitializeComponent();
-        BackColor = Color.White;
     }
 
     public Container(Color backColor)
