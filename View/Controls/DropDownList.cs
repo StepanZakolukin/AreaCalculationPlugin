@@ -7,7 +7,7 @@ public class DropdownList : Container
     
     private ComboBox Items { get; set; }
 
-    public DropdownList(string name)
+    public DropdownList(string name) : base()
     {
         title = new Heading
         {

@@ -1,4 +1,3 @@
-using System.Runtime.InteropServices;
 using AreaCalculationPlugin.View.Controls;
 
 namespace AreaCalculationPlugin.View;
@@ -22,7 +21,7 @@ public partial class AreaOfThePremises : Form
     {
         InitializeComponent();
         BackColor = ColorTranslator.FromHtml("#F5F6F8");
-        CustomWindow(ColorTranslator.FromHtml("#F5F6F8"), Handle);
+        NotClientPartOfForm.CustomWindow(ColorTranslator.FromHtml("#F5F6F8"), Handle);
         Text = "Площади помещений";
         Size = new Size(766, 672);
         Padding = new Padding(30, 22, 30, 20);
@@ -256,22 +255,6 @@ public partial class AreaOfThePremises : Form
         cell2.Controls.Add(ButtonCalculate, 1, 0);
 
         yield return cell2;
-    }
-    #endregion
-
-    #region Меням цвет вехней рамки формы
-    private string ToBgr(Color c) => $"{c.B:X2}{c.G:X2}{c.R:X2}";
-
-    [DllImport("DwmApi")]
-    private static extern int DwmSetWindowAttribute(IntPtr hwnd, int attr, int[] attrValue, int attrSize);
-
-    const int DWWMA_CAPTION_COLOR = 35;
-    public void CustomWindow(Color captionColor, IntPtr handle)
-    {
-        IntPtr hWnd = handle;
-        //Change caption color
-        int[] caption = new int[] { int.Parse(ToBgr(captionColor), System.Globalization.NumberStyles.HexNumber) };
-        DwmSetWindowAttribute(hWnd, DWWMA_CAPTION_COLOR, caption, 4);
     }
     #endregion
 }

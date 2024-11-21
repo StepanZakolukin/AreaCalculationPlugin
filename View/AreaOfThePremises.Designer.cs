@@ -35,7 +35,6 @@
             AutoScaleMode = AutoScaleMode.None;
             ClientSize = new Size(800, 450);
             Name = "AreaOfThePremises";
-            Text = "Form1";
             ResumeLayout(false);
         }
 
