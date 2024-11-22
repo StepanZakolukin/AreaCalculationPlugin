@@ -7,6 +7,7 @@ public partial class AreaOfThePremises : Form
 {
     private Container firstColumn;
     private Container secondColumn;
+
     private readonly TreeView ListOfPremises;
     private readonly TextBox NumberOfDecimalPlaces;
     private readonly List<DropdownListForGrouping> groupingParameters;
@@ -52,27 +53,7 @@ public partial class AreaOfThePremises : Form
         ChangeMarginsOfMainColumns(null, null);
     }
 
-    private void SubscribeToEvents()
-    {
-        SizeChanged += ChangeMarginsOfMainColumns;
-        ButtonSettingCoefficient.Click += RunCoefficientSettingForm;
-    }
-
-    private void RunCoefficientSettingForm(object? sender, EventArgs e)
-    {
-        var formForSettingCoefficient = new SettingСoefficient(DefaultAreaCoefficients);
-        formForSettingCoefficient.Show();
-    }
-
-    private void ChangeMarginsOfMainColumns(object? sender, EventArgs e)
-    {
-        var margin = (int)(16.02 / 768.96 * firstColumn.Height);
-
-        firstColumn.Margin = new Padding(margin);
-        secondColumn.Margin = firstColumn.Margin;
-    }
-
-    Container CreatAGridOfElements()
+    private Container CreatAGridOfElements()
     {
         var table = new Container(ColorTranslator.FromHtml("#F5F6F8"));
         table.Paint += MainTableOnBackgroundPaint;
@@ -93,6 +74,70 @@ public partial class AreaOfThePremises : Form
         return table;
     }
 
+    #region Обработчики событий
+    private void SubscribeToEvents()
+    {
+        SizeChanged += ChangeMarginsOfMainColumns;
+        ButtonSettingCoefficient.Click += RunCoefficientSettingForm;
+        ButtonHideEverything.Click += HideEverything_Click;
+        ButtonRevealEverything.Click += RevealEverything_Click;
+        ListOfPremises.AfterCheck += Node_AfterCheck;
+        SelectAllButton.Click += SelectAll_Click; ;
+        ButtonThrowOff.Click += ThrowOff_Click;
+    }
+
+    private void SelectAll_Click(object? sender, EventArgs e)
+    {
+        ListOfPremises.MarkAll(true);
+    }
+
+    private void ThrowOff_Click(object? sender, EventArgs e)
+    {
+        ListOfPremises.MarkAll(false);
+    }
+
+    private void RevealEverything_Click(object? sender, EventArgs e)
+    {
+        ListOfPremises.ExpandAll();
+    }
+
+    private void HideEverything_Click(object? sender, EventArgs e)
+    {
+        ListOfPremises.CollapseAll();
+    }
+
+    private void Node_AfterCheck(object sender, TreeViewEventArgs e)
+    {
+        e.Node.CheckAllChildNodes(e.Node.Checked);
+    }
+
+    private void RunCoefficientSettingForm(object? sender, EventArgs e)
+    {
+        var formForSettingCoefficient = new SettingСoefficient(DefaultAreaCoefficients);
+        formForSettingCoefficient.Show();
+    }
+
+    private void ChangeMarginsOfMainColumns(object? sender, EventArgs e)
+    {
+        var margin = (int)(16.02 / 768.96 * firstColumn.Height);
+
+        firstColumn.Margin = new Padding(margin);
+        secondColumn.Margin = firstColumn.Margin;
+    }
+
+    private void DrawBackgroundOfControlUnit(object? sender, PaintEventArgs e)
+    {
+        var table = sender as Container;
+        var graphics = e.Graphics;
+
+        graphics.FillRoundedRectangle(brush: new SolidBrush(ColorTranslator.FromHtml("#F5F6F8")),
+            new Rectangle(0, 0, table.Size.Width,
+            table.Size.Height),
+            radius: 10);
+
+        graphics.Dispose();
+    }
+
     private void MainTableOnBackgroundPaint(object? sender, PaintEventArgs e)
     {
         var table = sender as Container;
@@ -108,6 +153,7 @@ public partial class AreaOfThePremises : Form
 
         graphics.Dispose();
     }
+    #endregion
 
     #region Первая колонка
     private Container CreateFirstColumn()
@@ -161,19 +207,6 @@ public partial class AreaOfThePremises : Form
         return table;
     }
 
-    private void DrawBackgroundOfControlUnit(object? sender, PaintEventArgs e)
-    {
-        var table = sender as Container;
-        var graphics = e.Graphics;
-
-        graphics.FillRoundedRectangle(brush: new SolidBrush(ColorTranslator.FromHtml("#F5F6F8")),
-            new Rectangle(0, 0, table.Size.Width,
-            table.Size.Height),
-            radius: 10);
-
-        graphics.Dispose();
-    }
-
     public void Fill()
     {
         ListOfPremises.CheckBoxes = true;
@@ -189,7 +222,7 @@ public partial class AreaOfThePremises : Form
         }
     }
 
-    Container СreateAKeypadForTheFirstColumn(MyButton[,] buttons)
+    private Container СreateAKeypadForTheFirstColumn(MyButton[,] buttons)
     {
         var table = new Container(ColorTranslator.FromHtml("#F5F6F8"));
         table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
