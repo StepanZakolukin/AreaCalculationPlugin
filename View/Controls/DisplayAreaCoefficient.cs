@@ -1,23 +1,46 @@
-﻿namespace AreaCalculationPlugin.View.Controls;
+﻿using AreaCalculationPlugin.Model;
 
-internal class AreaCoefficient : Container
+
+namespace AreaCalculationPlugin.View.Controls;
+
+internal class DisplayAreaCoefficient : Container
 {
-    public readonly Heading Name;
-    public int FontSize { get; private set; }
-    private const double Delta = 0.1;
-    public double Coefficient { get; private set; }
+    private int fontSize;
+    public int FontSize 
+    { 
+        get
+        {
+            return fontSize;
+        }
+        set
+        {
+            if (value == 0)
+                throw new ArgumentException();
+        }
+    }
 
-    public readonly Panel DisplayForCoefficient;
+    private const double Delta = 0.1;
+
+    public readonly Heading Name;
     public readonly MyButton ButtonPlus;
     public readonly MyButton ButtonMinus;
+    public readonly Panel DisplayForCoefficient;
+    public readonly CoefficientsInfo Coefficient;
 
-    public AreaCoefficient(string name, Padding padding, double coefficient = 1, int fontSize = 16) : base(Color.White)
+    private readonly static Image PlusImage = Image.FromFile("../../../Resources/ButtonPlus.png");
+    private readonly static Image MinusImage = Image.FromFile("../../../Resources/ButtonMinus.png");
+
+    public DisplayAreaCoefficient(Padding padding, CoefficientsInfo coefficient, int fontSz = 16)
+        : base(Color.White)
     {
         Padding = padding;
-        FontSize = fontSize;
+        fontSize = fontSz;
         Coefficient = coefficient;
 
-        Name = new(name, fontSize: FontSize, FontStyle.Bold) { Margin = new Padding(7, 0, 1, 0) };
+        Name = new(
+            Coefficient.NameRoomCategory,
+            fontSize: FontSize, FontStyle.Bold) { Margin = new Padding(7, 0, 1, 0) };
+
         DisplayForCoefficient = new Panel()
         {
             Margin = new Padding(left: 2, top: 0, right: 2, bottom: 2),
@@ -27,10 +50,10 @@ internal class AreaCoefficient : Container
         DisplayForCoefficient.Paint += DrawBackground;
 
         ButtonPlus = new(margin: new Padding(2, 0, 2, 1));
-        CreateAndCustomizeButtons(ButtonPlus, Image.FromFile("../../../Resources/ButtonPlus.png"));
+        CreateAndCustomizeButtons(ButtonPlus, PlusImage);
 
         ButtonMinus = new(margin: ButtonPlus.Margin);
-        CreateAndCustomizeButtons(ButtonMinus, Image.FromFile("../../../Resources/ButtonMinus.png"));
+        CreateAndCustomizeButtons(ButtonMinus, MinusImage);
 
         InitializeComponent();
         SubscribeToEvents();
@@ -58,7 +81,7 @@ internal class AreaCoefficient : Container
     private void PrintText(Graphics graphics)
     {
         graphics.DrawString(
-            Coefficient.ToString().Replace(',', '.'),
+            Math.Round(Coefficient.Coefficient, 1).ToString().Replace(',', '.'),
             new Font("Inter", FontSize, FontStyle.Bold, GraphicsUnit.Pixel),
             new SolidBrush(ColorTranslator.FromHtml("#515254")),
             new Rectangle(Point.Empty, DisplayForCoefficient.Size),
@@ -74,24 +97,6 @@ internal class AreaCoefficient : Container
         button.FlatAppearance.BorderSize = 0;
         button.FlatAppearance.MouseDownBackColor = BackColor;
         button.FlatAppearance.MouseOverBackColor = BackColor;
-    }
-
-    public AreaCoefficient(string name, double coefficient = 1) : base(Color.White)
-    {
-        if (coefficient > 1 || coefficient <= 1)
-            throw new ArgumentException("Значение должно удовлетворять требованиям: 0 < coefficient <= 1");
-
-        Name = new(name, fontSize: 16, FontStyle.Bold);
-        DisplayForCoefficient = new()
-        {
-            Text = coefficient.ToString(),
-            Font = new Font("Inter", 16, FontStyle.Bold, GraphicsUnit.Pixel),
-        };
-        ButtonPlus = new();
-        ButtonMinus = new();
-
-        InitializeComponent();
-        SubscribeToEvents();
     }
 
     private void InitializeComponent()
@@ -122,13 +127,17 @@ internal class AreaCoefficient : Container
 
     private void IncreaseValue(object? sender, EventArgs e)
     {
-        if (Coefficient + Delta <= 1) Coefficient = Math.Round(Coefficient + Delta, 1);
+        if (Coefficient.Coefficient + Delta <= 1)
+            Coefficient.Coefficient += Delta;
+
         Invalidate();
     }
 
     private void DecreaseValue(object? sender, EventArgs e)
     {
-        if (Coefficient - Delta > 0.0000001) Coefficient = Math.Round(Coefficient - Delta, 1);
+        if (Coefficient.Coefficient - Delta > 0.0000001)
+            Coefficient.Coefficient -= Delta;
+
         Invalidate();
     }
 }

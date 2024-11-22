@@ -1,3 +1,4 @@
+using AreaCalculationPlugin.Model;
 using AreaCalculationPlugin.View.Controls;
 
 namespace AreaCalculationPlugin.View;
@@ -9,6 +10,7 @@ public partial class AreaOfThePremises : Form
     private readonly TreeView ListOfPremises;
     private readonly TextBox NumberOfDecimalPlaces;
     private readonly List<DropdownListForGrouping> groupingParameters;
+    private readonly CoefficientsInfo[] DefaultAreaCoefficients;
 
     private readonly string[] HeadersOfGroupingControls = ["Группировать", "Затем по", "Затем по"];
     private MyButton SelectAllButton = new(margin: new Padding(0, 0, 5, 5)) { Text = "Выбрать все" };
@@ -22,8 +24,10 @@ public partial class AreaOfThePremises : Form
         BackColor = ColorTranslator.FromHtml("#EFE650")
     };
 
-    public AreaOfThePremises()
+    public AreaOfThePremises(CoefficientsInfo[] defaultAreaCoefficients)
     {
+        DefaultAreaCoefficients = defaultAreaCoefficients;
+
         InitializeComponent();
         BackColor = ColorTranslator.FromHtml("#F5F6F8");
         NotClientPartOfForm.CustomWindow(ColorTranslator.FromHtml("#F5F6F8"), Handle);
@@ -44,13 +48,20 @@ public partial class AreaOfThePremises : Form
         Fill();
         Controls.Add(CreatAGridOfElements());
 
-
+        SubscribeToEvents();
         ChangeMarginsOfMainColumns(null, null);
     }
 
     private void SubscribeToEvents()
     {
         SizeChanged += ChangeMarginsOfMainColumns;
+        ButtonSettingCoefficient.Click += RunCoefficientSettingForm;
+    }
+
+    private void RunCoefficientSettingForm(object? sender, EventArgs e)
+    {
+        var formForSettingCoefficient = new SettingСoefficient(DefaultAreaCoefficients);
+        formForSettingCoefficient.Show();
     }
 
     private void ChangeMarginsOfMainColumns(object? sender, EventArgs e)

@@ -1,24 +1,18 @@
-﻿using AreaCalculationPlugin.View.Controls;
+﻿using AreaCalculationPlugin.Model;
+using AreaCalculationPlugin.View.Controls;
 
 namespace AreaCalculationPlugin.View;
 
-internal class SettingСoefficient : Form
+public class SettingСoefficient : Form
 {
     private MyButton saveButton = new(ColorTranslator.FromHtml("#EFE650")) { Text = "Сохранить" };
 
-    private Dictionary<string, double> coefficientsInfo = new()
-    {
-        ["Жилые помещения квартиры"] = 1,
-        ["Нежилые помещения квартиры"] = 1,
-        ["Лоджии"] = 0.5,
-        ["Балконы, Террасы"] = 0.3,
-        ["Нежилые помещения, Общественные (МОП)"] = 1,
-        ["Офисы"] = 1,
-        ["Теплые лоджии"] = 1
-    };
+    private readonly CoefficientsInfo[] CoefficientsInfo;
 
-    public SettingСoefficient()
+    public SettingСoefficient(CoefficientsInfo[] coefficientsInfo)
     {
+        CoefficientsInfo = coefficientsInfo;
+
         InitializeComponent();
 
         var table = CreateTableOfControls();
@@ -57,14 +51,14 @@ internal class SettingСoefficient : Form
 
         var row = 0;
         var column = 0;
-        foreach (var coefficientName in coefficientsInfo.Keys)
+        foreach (var coefficient in CoefficientsInfo)
         {
             mainTable.RowStyles.Add(new RowStyle(SizeType.Absolute, 40));
 
-            mainTable.Controls.Add(new AreaCoefficient(
-                    coefficientName,
+            mainTable.Controls.Add(
+                new DisplayAreaCoefficient(
                     new Padding(0, 6, 0, 4),
-                    coefficientsInfo[coefficientName]),
+                    coefficient),
                 column, row++);
         }
 
@@ -111,5 +105,12 @@ internal class SettingСoefficient : Form
         Padding = new Padding(25, 13, 25, 17);
         FormBorderStyle = FormBorderStyle.FixedSingle;
         MaximizeBox = false;
+
+        saveButton.Click += CloseForm;
+    }
+
+    private void CloseForm(object? sender, EventArgs e)
+    {
+        Close();
     }
 }
