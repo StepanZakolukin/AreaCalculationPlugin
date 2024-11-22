@@ -46,7 +46,6 @@ public partial class AreaOfThePremises : Form
         };
         groupingParameters = [];
         ListOfPremises = new TreeView();
-        Fill();
         Controls.Add(CreatAGridOfElements());
 
         SubscribeToEvents();
@@ -205,21 +204,6 @@ public partial class AreaOfThePremises : Form
         }));
 
         return table;
-    }
-
-    public void Fill()
-    {
-        ListOfPremises.CheckBoxes = true;
-        ListOfPremises.ShowLines = false;
-        ListOfPremises.Scrollable = true;
-        ListOfPremises.BorderStyle = BorderStyle.None;
-
-        for (var i = 0; i < 10; i++)
-        {
-            ListOfPremises.Nodes.Add("Родитель" + i.ToString());
-            ListOfPremises.Nodes[i].Nodes.Add("Ребенок 1");
-            ListOfPremises.Nodes[i].Nodes.Add("Ребенок 2");
-        }
     }
 
     private Container СreateAKeypadForTheFirstColumn(MyButton[,] buttons)
