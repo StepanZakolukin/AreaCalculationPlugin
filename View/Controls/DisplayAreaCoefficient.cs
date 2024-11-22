@@ -1,4 +1,5 @@
 ﻿using AreaCalculationPlugin.Model;
+using AreaCalculationPlugin.View.Extensions;
 
 
 namespace AreaCalculationPlugin.View.Controls;

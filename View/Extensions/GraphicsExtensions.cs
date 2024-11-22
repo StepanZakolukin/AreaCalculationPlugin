@@ -1,4 +1,4 @@
-﻿namespace AreaCalculationPlugin.View;
+﻿namespace AreaCalculationPlugin.View.Extensions;
 
 public static class GraphicsExtensions
 {
@@ -71,14 +71,14 @@ public static class GraphicsExtensions
                 new Point(x, rectangle.Location.Y + rectangle.Size.Height - radius));
         }
 
-        DrawRoundedCorners(graphics, pen, rectangle, radius);
+        graphics.DrawRoundedCorners(pen, rectangle, radius);
     }
 
     private static void DrawRoundedCorners(this Graphics graphics, Pen pen, Rectangle rectangle, int radius)
     {
         var diameterOfCircle = 2 * radius;
         var cornerRectangles = CreateSetOfRectanglesToRoundCorners(diameterOfCircle, rectangle);
-        
+
         for (var i = 0; i < 4; i++)
             graphics.DrawArc(pen, cornerRectangles[i], i * 90 - 2, 94);
     }

@@ -1,4 +1,4 @@
-﻿namespace AreaCalculationPlugin.View;
+﻿namespace AreaCalculationPlugin.View.Extensions;
 
 internal static class TreeNodeExtension
 {
@@ -10,8 +10,8 @@ internal static class TreeNodeExtension
         foreach (TreeNode node in treeNode.Nodes)
         {
             node.Checked = nodeChecked;
-            if (node.Nodes.Count > 0) 
-                CheckAllChildNodes(node, nodeChecked);
+            if (node.Nodes.Count > 0)
+                node.CheckAllChildNodes(nodeChecked);
         }
     }
 }

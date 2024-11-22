@@ -1,4 +1,4 @@
-﻿namespace AreaCalculationPlugin.View;
+﻿namespace AreaCalculationPlugin.View.Extensions;
 
 internal static class TreeViewExtension
 {
