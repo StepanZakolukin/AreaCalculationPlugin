@@ -1,5 +1,8 @@
 using AreaCalculationPlugin.Model;
 using AreaCalculationPlugin.View;
+using System.Globalization;
+using System.Resources;
+using System.Text;
 
 namespace AreaCalculationPlugin;
 
@@ -22,19 +25,11 @@ internal static class Program
 
     private static CoefficientsInfo[] GetRoomCoefficients()
     {
-        var coefficients = new Dictionary<string, double>
-        {
-            ["Жилые помещения квартиры"] = 1,
-            ["Нежилые помещения квартиры"] = 1,
-            ["Лоджии"] = 0.5,
-            ["Балконы, Террасы"] = 0.3,
-            ["Нежилые помещения, Общественные (МОП)"] = 1,
-            ["Офисы"] = 1,
-            ["Теплые лоджии"] = 1
-        };
+        var rm = new ResourceManager(typeof(AreaOfThePremises));
 
-        return coefficients
-            .Select(pair => new CoefficientsInfo(pair.Key, pair.Value))
+        return rm.GetString("Coefficients").Split("\r\n")
+            .Select(line => line.Split(": "))
+            .Select(array => new CoefficientsInfo(array.First(), double.Parse(array.Last())))
             .ToArray();
     }
 }

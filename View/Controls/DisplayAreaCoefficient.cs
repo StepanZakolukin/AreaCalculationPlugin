@@ -1,5 +1,6 @@
 ﻿using AreaCalculationPlugin.Model;
 using AreaCalculationPlugin.View.Extensions;
+using System.Resources;
 
 
 namespace AreaCalculationPlugin.View.Controls;
@@ -28,8 +29,15 @@ internal class DisplayAreaCoefficient : Container
     public readonly Panel DisplayForCoefficient;
     public readonly CoefficientsInfo Coefficient;
 
-    private readonly static Image PlusImage = Image.FromFile("../../../Resources/ButtonPlus.png");
-    private readonly static Image MinusImage = Image.FromFile("../../../Resources/ButtonMinus.png");
+    private readonly static Image PlusImage;
+    private readonly static Image MinusImage;
+
+    static DisplayAreaCoefficient()
+    {
+        var rm = new ResourceManager(typeof(SettingСoefficient));
+        MinusImage = (Bitmap)new ImageConverter().ConvertFrom(rm.GetObject("ButtonMinus"));
+        PlusImage = (Bitmap)new ImageConverter().ConvertFrom(rm.GetObject("ButtonPlus"));
+    }
 
     public DisplayAreaCoefficient(Padding padding, CoefficientsInfo coefficient, int fontSz = 16)
         : base(Color.White)

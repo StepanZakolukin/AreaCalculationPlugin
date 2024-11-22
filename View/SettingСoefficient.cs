@@ -4,7 +4,7 @@ using AreaCalculationPlugin.View.Extensions;
 
 namespace AreaCalculationPlugin.View;
 
-public class SettingСoefficient : Form
+public partial class SettingСoefficient : Form
 {
     private MyButton saveButton = new(ColorTranslator.FromHtml("#EFE650")) { Text = "Сохранить" };
 
@@ -15,11 +15,27 @@ public class SettingСoefficient : Form
         CoefficientsInfo = coefficientsInfo;
 
         InitializeComponent();
+        InitializeControls();
 
         var table = CreateTableOfControls();
         FillTheControlTable(table);
 
         Controls.Add(table);
+    }
+
+    private void InitializeControls()
+    {
+        ResumeLayout(false);
+        BackColor = ColorTranslator.FromHtml("#F5F6F8");
+        NotClientPartOfForm.CustomWindow(ColorTranslator.FromHtml("#F5F6F8"), Handle);
+
+        Size = new Size(570, 420);
+        Text = "Настройка коэффициента";
+        Padding = new Padding(25, 13, 25, 17);
+        FormBorderStyle = FormBorderStyle.FixedSingle;
+        MaximizeBox = false;
+
+        saveButton.Click += CloseForm;
     }
 
     private void FillTheControlTable(Container mainTable)
@@ -94,24 +110,9 @@ public class SettingСoefficient : Form
         return table;
     }
 
-    private void InitializeComponent()
-    {
-        ResumeLayout(false);
-        AutoScaleMode = AutoScaleMode.None;
-        BackColor = ColorTranslator.FromHtml("#F5F6F8");
-        NotClientPartOfForm.CustomWindow(ColorTranslator.FromHtml("#F5F6F8"), Handle);
-
-        Size = new Size(570, 420);
-        Text = "Настройка коэффициента";
-        Padding = new Padding(25, 13, 25, 17);
-        FormBorderStyle = FormBorderStyle.FixedSingle;
-        MaximizeBox = false;
-
-        saveButton.Click += CloseForm;
-    }
-
     private void CloseForm(object? sender, EventArgs e)
     {
         Close();
     }
 }
+

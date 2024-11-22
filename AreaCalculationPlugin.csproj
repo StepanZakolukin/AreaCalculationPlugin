@@ -9,6 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="View\SettingСoefficient.resources" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Calculator\" />
   </ItemGroup>
 
