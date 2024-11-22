@@ -92,7 +92,7 @@ public partial class AreaOfThePremises : Form
             borderSize: 3,
             new Rectangle(
                 new Point(0, 0),
-                new Size(table.Width, table.Height)),
+                table.Size),
             radius: 10);
 
         graphics.Dispose();

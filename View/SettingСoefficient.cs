@@ -60,13 +60,12 @@ internal class SettingСoefficient : Form
         foreach (var coefficientName in coefficientsInfo.Keys)
         {
             mainTable.RowStyles.Add(new RowStyle(SizeType.Absolute, 40));
-            var currentCell = new AreaCoefficient(
-                coefficientName,
-                new Padding(0, 6, 0, 4),
-                coefficientsInfo[coefficientName]);
 
-            mainTable.Controls.Add(currentCell, column, row++);
-            currentCell.CoefficientHasBeenChanged += (bool correct) => saveButton.Enabled = correct;
+            mainTable.Controls.Add(new AreaCoefficient(
+                    coefficientName,
+                    new Padding(0, 6, 0, 4),
+                    coefficientsInfo[coefficientName]),
+                column, row++);
         }
 
         return mainTable;
