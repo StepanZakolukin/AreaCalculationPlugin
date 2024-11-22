@@ -20,5 +20,6 @@ public class Heading : Label
         Margin = new Padding(0);
         Padding = new Padding(0);
         ForeColor = ColorTranslator.FromHtml("#515254");
+        TextAlign = ContentAlignment.MiddleLeft;
     }
 }

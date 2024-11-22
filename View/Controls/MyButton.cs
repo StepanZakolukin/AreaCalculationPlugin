@@ -8,6 +8,13 @@ public class MyButton : Button
         InitializeComponent();
     }
 
+    public MyButton(Color backColor)
+    {
+        Margin = new Padding(0);
+        InitializeComponent();
+        BackColor = backColor;
+    }
+
     public MyButton(Padding margin)
     {
         Margin = margin;
