@@ -7,6 +7,7 @@ namespace AreaCalculationPlugin.View;
 
 public partial class AreaOfThePremises : Form
 {
+    #region Поля класса
     private Container firstColumn;
     private Container secondColumn;
 
@@ -49,6 +50,7 @@ public partial class AreaOfThePremises : Form
     };
 
     public static PrivateFontCollection PluginFontCollection = new();
+    #endregion
 
     static AreaOfThePremises()
     {
@@ -73,10 +75,15 @@ public partial class AreaOfThePremises : Form
             BackColor = ColorTranslator.FromHtml("#F5F6F8"),
             ForeColor = ColorTranslator.FromHtml("#515254"),
             Font = new Font(PluginFontCollection.Families.First(), 11, FontStyle.Bold, GraphicsUnit.Pixel),
+            TextAlign = HorizontalAlignment.Center,
+            Text = "0"
         };
 
         groupingParameters = [];
-        ListOfPremises = new TreeView();
+        ListOfPremises = new TreeView
+        {
+            BorderStyle = BorderStyle.None
+        };
         Controls.Add(CreatAGridOfElements());
 
         SubscribeToEvents();
