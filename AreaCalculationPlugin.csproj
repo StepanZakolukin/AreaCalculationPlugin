@@ -16,4 +16,10 @@
     <Folder Include="Calculator\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Resources\Inter.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

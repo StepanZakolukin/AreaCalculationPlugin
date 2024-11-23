@@ -15,7 +15,7 @@ public class Heading : Label
 
     private void InitializeComponent(int fontSize, FontStyle fontStyle)
     {
-        Font = new Font("Inter", fontSize, fontStyle, GraphicsUnit.Pixel);
+        Font = new Font(AreaOfThePremises. PluginFontCollection.Families.First(), fontSize, fontStyle, GraphicsUnit.Pixel);
         Dock = DockStyle.Fill;
         Margin = new Padding(0);
         Padding = new Padding(0);

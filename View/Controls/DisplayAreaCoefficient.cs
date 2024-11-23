@@ -91,7 +91,7 @@ internal class DisplayAreaCoefficient : Container
     {
         graphics.DrawString(
             Math.Round(Coefficient.Coefficient, 1).ToString().Replace(',', '.'),
-            new Font("Inter", FontSize, FontStyle.Bold, GraphicsUnit.Pixel),
+            new Font(AreaOfThePremises.PluginFontCollection.Families.First(), FontSize, FontStyle.Bold, GraphicsUnit.Pixel),
             new SolidBrush(ColorTranslator.FromHtml("#515254")),
             new Rectangle(Point.Empty, DisplayForCoefficient.Size),
             new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center });

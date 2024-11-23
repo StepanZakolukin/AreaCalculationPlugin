@@ -1,6 +1,7 @@
 using AreaCalculationPlugin.Model;
 using AreaCalculationPlugin.View.Controls;
 using AreaCalculationPlugin.View.Extensions;
+using System.Drawing.Text;
 
 namespace AreaCalculationPlugin.View;
 
@@ -26,6 +27,13 @@ public partial class AreaOfThePremises : Form
         BackColor = ColorTranslator.FromHtml("#EFE650")
     };
 
+    public static PrivateFontCollection PluginFontCollection = new();
+
+    static AreaOfThePremises()
+    {
+        PluginFontCollection.AddFontFile("Resources/Inter.ttf");
+    }
+
     public AreaOfThePremises(CoefficientsInfo[] defaultAreaCoefficients)
     {
         DefaultAreaCoefficients = defaultAreaCoefficients;
@@ -41,10 +49,13 @@ public partial class AreaOfThePremises : Form
         NumberOfDecimalPlaces = new()
         {
             Dock = DockStyle.Fill,
-            BackColor = Color.White,
+            BackColor = ColorTranslator.FromHtml("#F5F6F8"),
             ForeColor = ColorTranslator.FromHtml("#515254"),
-            Font = new Font("Inter", 11, FontStyle.Bold, GraphicsUnit.Pixel)
+            Font = new Font(PluginFontCollection.Families.First(), 11, FontStyle.Bold, GraphicsUnit.Pixel),
         };
+
+        NumberOfDecimalPlaces.Text = NumberOfDecimalPlaces.Font.Name;
+
         groupingParameters = [];
         ListOfPremises = new TreeView();
         Controls.Add(CreatAGridOfElements());
@@ -55,8 +66,7 @@ public partial class AreaOfThePremises : Form
 
     private Container CreatAGridOfElements()
     {
-        var table = new Container(ColorTranslator.FromHtml("#F5F6F8"));
-        table.Paint += MainTableOnBackgroundPaint;
+        var table = new Container();
 
         table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
         table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
@@ -70,6 +80,7 @@ public partial class AreaOfThePremises : Form
         secondColumn = CreateSecondColumn();
         table.Controls.Add(secondColumn, 1, 0);
         FillSecondColumn(secondColumn);
+        table.Paint += MainTableOnBackgroundPaint;
 
         return table;
     }
@@ -158,7 +169,7 @@ public partial class AreaOfThePremises : Form
     #region Первая колонка
     private Container CreateFirstColumn()
     {
-        var column = new Container(Color.White);
+        var column = new Container();
 
         for (var i = 0; i < 3; i++)
             column.RowStyles.Add(new RowStyle(SizeType.Absolute, 50));
@@ -181,7 +192,7 @@ public partial class AreaOfThePremises : Form
 
     private Container CreateContainer()
     {
-        var table = new Container(Color.White)
+        var table = new Container()
         {
             Padding = new Padding(4, 4, 4, 6),
             Margin = new Padding(0, 4, 0, 0)
@@ -209,7 +220,7 @@ public partial class AreaOfThePremises : Form
 
     private Container СreateAKeypadForTheFirstColumn(MyButton[,] buttons)
     {
-        var table = new Container(ColorTranslator.FromHtml("#F5F6F8"));
+        var table = new Container();
         table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
         table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
         table.RowStyles.Add(new RowStyle(SizeType.Percent, 50));
@@ -226,7 +237,7 @@ public partial class AreaOfThePremises : Form
     #region Вторая колонка
     private Container CreateSecondColumn()
     {
-        var column = new Container(Color.White);
+        var column = new Container();
 
         column.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
 
@@ -255,8 +266,11 @@ public partial class AreaOfThePremises : Form
             "Число комнат"
         };
 
-        foreach (var cell in titles.Select(title => new DropdownList(title)))
+        foreach (var cell in titles
+            .Select(title => new DropdownList(title) { Margin = new Padding(left: 0, top: 0, right: 0, bottom: 4)}))
+        {
             table.Controls.Add(cell);
+        }
         table.Controls.Add(CreateRoundingControls());
         table.Controls.Add(new Panel
         {
@@ -271,17 +285,21 @@ public partial class AreaOfThePremises : Form
 
     Container CreateRoundingControls()
     {
-        var table = new Container(Color.White);
+        var table = new Container();
+        table.Margin = new Padding(left: 0, top: 4, right: 0, bottom: 0);
 
         table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50.71F));
-        table.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 151));
-        table.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 60));
+        table.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 191));
+        table.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 40));
         table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 49.29F));
 
         table.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
 
         table.Controls.Add(new Panel { Dock = DockStyle.Fill }, 0, 0);
-        table.Controls.Add(new Heading { Text = "Знаков после запятой" }, 1, 0);
+        table.Controls.Add(new Heading("Знаков после запятой")
+        {
+            Margin = new Padding(left: 0, top: 0, right: 20, bottom: 0)
+        }, 1, 0);
         
         table.Controls.Add(NumberOfDecimalPlaces, 2, 0);
         table.Controls.Add(new Panel { Dock = DockStyle.Fill }, 3, 0);
@@ -291,7 +309,7 @@ public partial class AreaOfThePremises : Form
 
     private IEnumerable<Container> СreateAKeypadForTheSecondColumn()
     {
-        var cell1 = new Container(Color.White);
+        var cell1 = new Container();
         cell1.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
         cell1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
         cell1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 150));
@@ -301,7 +319,7 @@ public partial class AreaOfThePremises : Form
 
         yield return cell1;
 
-        var cell2 = new Container(Color.White);
+        var cell2 = new Container();
         cell2.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
         cell2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
         cell2.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 130));

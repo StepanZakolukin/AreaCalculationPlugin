@@ -12,11 +12,10 @@ public class DropdownList : Container
         title = new Heading
         {
             Text = name,
-            Margin = new Padding(0, 0, 0, 4)
+            //Margin = new Padding(0, 0, 0, 4)
         };
         Items = new ComboBox();
         ConfigureList(Items);
-
 
         ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
         RowStyles.Add(new RowStyle(SizeType.Percent, 100));
@@ -33,7 +32,7 @@ public class DropdownList : Container
         comboBox.Padding = new Padding(0);
         comboBox.BackColor = ColorTranslator.FromHtml("#F5F6F8");
         comboBox.ForeColor = ColorTranslator.FromHtml("#515254");
-        comboBox.Font = new Font("Inter", 13, FontStyle.Bold, GraphicsUnit.Pixel);
+        comboBox.Font = new Font(AreaOfThePremises.PluginFontCollection.Families.First(), 13, FontStyle.Bold, GraphicsUnit.Pixel);
         comboBox.FlatStyle = FlatStyle.Flat;
     }
 
