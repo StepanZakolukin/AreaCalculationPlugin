@@ -331,7 +331,7 @@ public partial class AreaOfThePremises : Form
         var cell1 = new Container();
         cell1.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
         cell1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
-        cell1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 150));
+        cell1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 164));
 
         cell1.Controls.Add(new Panel { Dock = DockStyle.Fill, BackColor = Color.White }, 0, 0);
         cell1.Controls.Add(ButtonSettingCoefficient, 1, 0);
