@@ -16,15 +16,36 @@ public partial class AreaOfThePremises : Form
     private readonly CoefficientsInfo[] DefaultAreaCoefficients;
 
     private readonly string[] HeadersOfGroupingControls = ["Группировать", "Затем по", "Затем по"];
-    private MyButton SelectAllButton = new(margin: new Padding(0, 0, 5, 5)) { Text = "Выбрать все" };
-    private MyButton ButtonRevealEverything = new(margin: new Padding(0, 5, 5, 0)) { Text = "Раскрыть все" };
-    private MyButton ButtonThrowOff = new(margin: new Padding(5, 0, 0, 5)) { Text = "Сбросить" };
-    private MyButton ButtonHideEverything = new(margin: new Padding(5, 5, 0, 0)) { Text = "Спрятать все" };
-    private MyButton ButtonSettingCoefficient = new(margin: new Padding(0, 0, 5, 10)) { Text = "Настройка коэффициента" };
-    private MyButton ButtonCalculate = new(margin: new Padding(0, 0, 5, 0))
-    { 
+    private RectangularRoundedButton SelectAllButton = new()
+    {
+        Margin = new Padding(0, 0, 5, 5),
+        Text = "Выбрать все"
+    };
+    private RectangularRoundedButton ButtonRevealEverything = new()
+    {
+        Margin = new Padding(0, 5, 5, 0), 
+        Text = "Раскрыть все" 
+    };
+    private RectangularRoundedButton ButtonThrowOff = new() 
+    {
+        Margin = new Padding(5, 0, 0, 5),
+        Text = "Сбросить"
+    };
+    private RectangularRoundedButton ButtonHideEverything = new() 
+    {
+        Margin = new Padding(5, 5, 0, 0),
+        Text = "Спрятать все" 
+    };
+    private RectangularRoundedButton ButtonSettingCoefficient = new() 
+    {
+        Margin = new Padding(0, 0, 5, 10),
+        Text = "Настройка коэффициента"
+    };
+
+    private RectangularRoundedButton ButtonCalculate = new(ColorTranslator.FromHtml("#EFE650"))
+    {
         Text = "Посчитать",
-        BackColor = ColorTranslator.FromHtml("#EFE650")
+        Margin = new Padding(0, 0, 5, 0),
     };
 
     public static PrivateFontCollection PluginFontCollection = new();
@@ -218,7 +239,7 @@ public partial class AreaOfThePremises : Form
         return table;
     }
 
-    private Container СreateAKeypadForTheFirstColumn(MyButton[,] buttons)
+    private Container СreateAKeypadForTheFirstColumn(RectangularRoundedButton[,] buttons)
     {
         var table = new Container();
         table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
@@ -290,7 +311,7 @@ public partial class AreaOfThePremises : Form
 
         table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50.71F));
         table.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 191));
-        table.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 40));
+        table.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 60));
         table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 49.29F));
 
         table.RowStyles.Add(new RowStyle(SizeType.Percent, 100));

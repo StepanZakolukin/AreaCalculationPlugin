@@ -1,21 +1,21 @@
 ﻿namespace AreaCalculationPlugin.View.Controls;
 
-public class MyButton : Button
+public class RoundButton : Button
 {
-    public MyButton()
+    public RoundButton()
     {
         Margin = new Padding(0);
         InitializeComponent();
     }
 
-    public MyButton(Color backColor)
+    public RoundButton(Color backColor)
     {
         Margin = new Padding(0);
         InitializeComponent();
         BackColor = backColor;
     }
 
-    public MyButton(Padding margin)
+    public RoundButton(Padding margin)
     {
         Margin = margin;
         InitializeComponent();

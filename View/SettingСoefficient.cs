@@ -6,7 +6,7 @@ namespace AreaCalculationPlugin.View;
 
 public partial class SettingСoefficient : Form
 {
-    private MyButton saveButton = new(ColorTranslator.FromHtml("#EFE650")) { Text = "Сохранить" };
+    private RectangularRoundedButton saveButton = new(ColorTranslator.FromHtml("#EFE650")) { Text = "Сохранить" };
 
     private readonly CoefficientsInfo[] CoefficientsInfo;
 

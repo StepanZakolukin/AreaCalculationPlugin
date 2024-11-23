@@ -24,8 +24,8 @@ internal class DisplayAreaCoefficient : Container
     private const double Delta = 0.1;
 
     public readonly Heading Name;
-    public readonly MyButton ButtonPlus;
-    public readonly MyButton ButtonMinus;
+    public readonly RoundButton ButtonPlus;
+    public readonly RoundButton ButtonMinus;
     public readonly Panel DisplayForCoefficient;
     public readonly CoefficientsInfo Coefficient;
 
