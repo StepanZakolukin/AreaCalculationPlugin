@@ -75,8 +75,6 @@ public partial class AreaOfThePremises : Form
             Font = new Font(PluginFontCollection.Families.First(), 11, FontStyle.Bold, GraphicsUnit.Pixel),
         };
 
-        NumberOfDecimalPlaces.Text = NumberOfDecimalPlaces.Font.Name;
-
         groupingParameters = [];
         ListOfPremises = new TreeView();
         Controls.Add(CreatAGridOfElements());
