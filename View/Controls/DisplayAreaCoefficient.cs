@@ -18,15 +18,18 @@ internal class DisplayAreaCoefficient : Container
         {
             if (value == 0)
                 throw new ArgumentException();
+            fontSize = value;
         }
     }
 
+    public StringFormat Format { get; set; }
+
     private const double Delta = 0.1;
 
-    public readonly Heading Name;
-    public readonly RoundButton ButtonPlus;
-    public readonly RoundButton ButtonMinus;
-    public readonly Panel DisplayForCoefficient;
+    private readonly Heading Title;
+    private readonly RoundButton ButtonPlus;
+    private readonly RoundButton ButtonMinus;
+    private readonly Panel DisplayForCoefficient;
     public readonly CoefficientsInfo Coefficient;
 
     private readonly static Image PlusImage;
@@ -42,13 +45,13 @@ internal class DisplayAreaCoefficient : Container
     public DisplayAreaCoefficient(Padding padding, CoefficientsInfo coefficient, int fontSz = 16)
         : base(Color.White)
     {
-        ForeColor = ColorTranslator.FromHtml("#515254");
         Padding = padding;
         fontSize = fontSz;
         Coefficient = coefficient;
+        ForeColor = ColorTranslator.FromHtml("#515254");
+        Format = new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
 
-        Name = new(
-            Coefficient.NameRoomCategory,
+        Title = new(Coefficient.NameRoomCategory,
             fontSize: FontSize, FontStyle.Bold) { Margin = new Padding(7, 0, 1, 0) };
 
         DisplayForCoefficient = new Panel()
@@ -95,7 +98,7 @@ internal class DisplayAreaCoefficient : Container
             Font,
             new SolidBrush(ForeColor),
             new Rectangle(Point.Empty, DisplayForCoefficient.Size),
-            new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center });
+            Format);
     }
 
     private void CreateAndCustomizeButtons(Button button, Image backgroundImage)
@@ -122,7 +125,7 @@ internal class DisplayAreaCoefficient : Container
         Controls.Add(ButtonPlus, column++, row);
         Controls.Add(DisplayForCoefficient, column++, row);
         Controls.Add(ButtonMinus, column++, row);
-        Controls.Add(Name, column++, row);
+        Controls.Add(Title, column++, row);
 
         Margin = new Padding(0, 0, 0, 0);
 
