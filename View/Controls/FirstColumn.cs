@@ -29,7 +29,7 @@ internal class FirstColumn : Container
         Text = "Спрятать все"
     };
 
-    public FirstColumn()
+    public FirstColumn() : base()
     {
         for (var i = 0; i < 3; i++)
             RowStyles.Add(new RowStyle(SizeType.Absolute, 50));
@@ -40,7 +40,8 @@ internal class FirstColumn : Container
             BorderStyle = BorderStyle.None,
             CheckBoxes = true,
             ShowLines = false,
-            Scrollable = true
+            Scrollable = true,
+            Font = new Font(AreaOfThePremises.DefaultFont.FontFamily, 11, FontStyle.Bold, GraphicsUnit.Pixel)
         };
 
         groupingParameters = [];

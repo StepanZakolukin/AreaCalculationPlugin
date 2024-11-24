@@ -42,6 +42,7 @@ internal class DisplayAreaCoefficient : Container
     public DisplayAreaCoefficient(Padding padding, CoefficientsInfo coefficient, int fontSz = 16)
         : base(Color.White)
     {
+        ForeColor = ColorTranslator.FromHtml("#515254");
         Padding = padding;
         fontSize = fontSz;
         Coefficient = coefficient;
@@ -91,8 +92,8 @@ internal class DisplayAreaCoefficient : Container
     {
         graphics.DrawString(
             Math.Round(Coefficient.Coefficient, 1).ToString().Replace(',', '.'),
-            new Font(AreaOfThePremises.PluginFontCollection.Families.First(), FontSize, FontStyle.Bold, GraphicsUnit.Pixel),
-            new SolidBrush(ColorTranslator.FromHtml("#515254")),
+            Font,
+            new SolidBrush(ForeColor),
             new Rectangle(Point.Empty, DisplayForCoefficient.Size),
             new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center });
     }
@@ -126,6 +127,7 @@ internal class DisplayAreaCoefficient : Container
         Margin = new Padding(0, 0, 0, 0);
 
         BackColor = Color.Transparent;
+        Font = new Font(AreaOfThePremises.DefaultFont.FontFamily, FontSize, FontStyle.Bold, GraphicsUnit.Pixel);
     }
 
     private void SubscribeToEvents()

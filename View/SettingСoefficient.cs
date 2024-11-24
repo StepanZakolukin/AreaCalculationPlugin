@@ -115,4 +115,3 @@ public partial class SettingСoefficient : Form
         Close();
     }
 }
-

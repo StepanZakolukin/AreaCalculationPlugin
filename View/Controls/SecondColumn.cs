@@ -20,7 +20,7 @@ internal class SecondColumn : Container
         Margin = new Padding(0, 0, 5, 0),
     };
 
-    public SecondColumn(CoefficientsInfo[] defaultAreaCoefficients)
+    public SecondColumn(CoefficientsInfo[] defaultAreaCoefficients) : base()
     {
         DefaultAreaCoefficients = defaultAreaCoefficients;
         NumberOfDecimalPlaces = new()
@@ -28,7 +28,7 @@ internal class SecondColumn : Container
             Dock = DockStyle.Fill,
             BackColor = ColorTranslator.FromHtml("#F5F6F8"),
             ForeColor = ColorTranslator.FromHtml("#515254"),
-            Font = new Font(AreaOfThePremises.PluginFontCollection.Families.First(), 11, FontStyle.Bold, GraphicsUnit.Pixel),
+            Font = new Font(AreaOfThePremises.DefaultFont.FontFamily, 11, FontStyle.Bold, GraphicsUnit.Pixel),
             TextAlign = HorizontalAlignment.Center,
             Text = "0"
         };

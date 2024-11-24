@@ -32,7 +32,7 @@ public class DropdownList : Container
         comboBox.Padding = new Padding(0);
         comboBox.BackColor = ColorTranslator.FromHtml("#F5F6F8");
         comboBox.ForeColor = ColorTranslator.FromHtml("#515254");
-        comboBox.Font = new Font(AreaOfThePremises.PluginFontCollection.Families.First(), 13, FontStyle.Bold, GraphicsUnit.Pixel);
+        comboBox.Font = new Font(AreaOfThePremises.DefaultFont.FontFamily, 13, FontStyle.Bold, GraphicsUnit.Pixel);
         comboBox.FlatStyle = FlatStyle.Flat;
     }
 

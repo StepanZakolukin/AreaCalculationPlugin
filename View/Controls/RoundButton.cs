@@ -26,7 +26,7 @@ public class RoundButton : Button
         ForeColor = ColorTranslator.FromHtml("#515254");
         BackColor = ColorTranslator.FromHtml("#EEEEEE");
 
-        Font = new Font(AreaOfThePremises.PluginFontCollection.Families.First(), 11, FontStyle.Bold, GraphicsUnit.Pixel);
+        Font = new Font(AreaOfThePremises.DefaultFont.FontFamily, 11, FontStyle.Bold, GraphicsUnit.Pixel);
         Padding = new Padding(0);
         Dock = DockStyle.Fill;
         FlatAppearance.BorderSize = 1;

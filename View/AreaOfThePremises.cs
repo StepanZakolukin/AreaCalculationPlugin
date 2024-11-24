@@ -10,27 +10,29 @@ public partial class AreaOfThePremises : Form
     private Container firstColumn;
     private Container secondColumn;
 
-    public static PrivateFontCollection PluginFontCollection = new();
-
+    public static new readonly Font DefaultFont;
     static AreaOfThePremises()
     {
-        PluginFontCollection.AddFontFile("Resources/Inter.ttf");
+        var pluginFontCollection = new PrivateFontCollection();
+        pluginFontCollection.AddFontFile("Resources/Inter.ttf");
+        DefaultFont = new Font(pluginFontCollection.Families[0], 14, FontStyle.Regular, GraphicsUnit.Pixel);
     }
 
     public AreaOfThePremises(CoefficientsInfo[] defaultAreaCoefficients)
     {
         InitializeComponent();
-        BackColor = ColorTranslator.FromHtml("#F5F6F8");
-        NotClientPartOfForm.CustomWindow(ColorTranslator.FromHtml("#F5F6F8"), Handle);
+
         Text = "Площади помещений";
-        Size = new Size(766, 672);
-        Padding = new Padding(30, 22, 30, 20);
         FormBorderStyle = FormBorderStyle.Sizable;
 
         Controls.Add(CreatAGridOfElements(defaultAreaCoefficients));
 
+        Padding = new Padding(30, 22, 30, 20);
         SizeChanged += ChangeMarginsOfMainColumns;
-        ChangeMarginsOfMainColumns(null, null);
+        Size = new Size(766, 672);
+
+        BackColor = ColorTranslator.FromHtml("#F5F6F8");
+        NotClientPartOfForm.CustomWindow(ColorTranslator.FromHtml("#F5F6F8"), Handle);
     }
 
     private Container CreatAGridOfElements(CoefficientsInfo[] defaultAreaCoefficients)
