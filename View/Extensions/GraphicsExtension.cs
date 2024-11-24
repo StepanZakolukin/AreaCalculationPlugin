@@ -1,6 +1,6 @@
 ﻿namespace AreaCalculationPlugin.View.Extensions;
 
-public static class GraphicsExtensions
+public static class GraphicsExtension
 {
     public static void FillRoundedRectangle(this Graphics graphics, Color backColor, Color borderColor,
         int borderSize, Rectangle rectangle, int radius)
