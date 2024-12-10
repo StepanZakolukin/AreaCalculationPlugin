@@ -56,9 +56,9 @@ internal class FirstColumn : Container
     {
         for (var i = 0; i < 10; i++)
         {
-            ListOfPremises.Nodes.Add("Родитель" + i.ToString());
-            ListOfPremises.Nodes[i].Nodes.Add("Ребенок 1");
-            ListOfPremises.Nodes[i].Nodes.Add("Ребенок 2");
+            ListOfPremises.Nodes.Add(i.ToString());
+            ListOfPremises.Nodes[i].Nodes.Add(i.ToString());
+            ListOfPremises.Nodes[i].Nodes.Add($"{i + 1}");
         }
     }
     private void SubscribeToEvents()
