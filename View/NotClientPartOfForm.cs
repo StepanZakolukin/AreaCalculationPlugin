@@ -14,7 +14,7 @@ internal static class NotClientPartOfForm
     {
         IntPtr hWnd = handle;
         //Change caption color
-        int[] caption = [int.Parse(ToBgr(captionColor), System.Globalization.NumberStyles.HexNumber)];
+        var caption = new[] { int.Parse(ToBgr(captionColor), System.Globalization.NumberStyles.HexNumber) };
         DwmSetWindowAttribute(hWnd, DWWMA_CAPTION_COLOR, caption, 4);
     }
 }

@@ -89,13 +89,12 @@ public static class GraphicsExtension
         var YValueForRightSide = rectangle.Location.Y + rectangle.Size.Height - diameterOfCircle;
         var XValueForBottomSide = rectangle.Location.X - diameterOfCircle + rectangle.Size.Width;
 
-        return
-        [
+        return new()
+        {
             new Rectangle(new Point(XValueForBottomSide, YValueForRightSide), sizeOfBoundingRect),
             new Rectangle(new Point(rectangle.Location.X, YValueForRightSide), sizeOfBoundingRect),
             new Rectangle(rectangle.Location, sizeOfBoundingRect),
             new Rectangle(new Point(XValueForBottomSide, rectangle.Location.Y), sizeOfBoundingRect),
-        ];
-        throw new NotImplementedException();
+        };
     }
 }

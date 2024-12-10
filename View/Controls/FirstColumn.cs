@@ -6,7 +6,7 @@ internal class FirstColumn : Container
 {
     private readonly TreeView ListOfPremises;
     private readonly List<DropdownListForGrouping> groupingParameters;
-    private static readonly string[] HeadersOfGroupingControls = ["Группировать", "Затем по", "Затем по"];
+    private static readonly string[] HeadersOfGroupingControls = new[] { "Группировать", "Затем по", "Затем по" };
 
     private readonly RectangularRoundedButton SelectAllButton = new()
     {
@@ -44,7 +44,7 @@ internal class FirstColumn : Container
             Font = new Font(AreaOfThePremises.DefaultFont.FontFamily, 11, FontStyle.Bold, GraphicsUnit.Pixel)
         };
 
-        groupingParameters = [];
+        groupingParameters = new();
 
         FillInTheFirstColumn();
         SubscribeToEvents();
