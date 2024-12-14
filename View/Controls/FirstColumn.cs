@@ -41,7 +41,7 @@ internal class FirstColumn : Container
             CheckBoxes = true,
             ShowLines = false,
             Scrollable = true,
-            Font = new Font(AreaOfThePremises.DefaultFont.FontFamily, 11, FontStyle.Bold, GraphicsUnit.Pixel)
+            Font = new Font(AreaOfPremises.DefaultFont.FontFamily, 11, FontStyle.Bold, GraphicsUnit.Pixel)
         };
 
         groupingParameters = new();

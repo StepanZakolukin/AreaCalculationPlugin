@@ -5,13 +5,13 @@ using System.Drawing.Text;
 
 namespace AreaCalculationPlugin.View;
 
-public partial class AreaOfThePremises : Form
+public partial class AreaOfPremises : Form
 {
     private Container firstColumn;
     private Container secondColumn;
 
     public static new readonly Font DefaultFont;
-    static AreaOfThePremises()
+    static AreaOfPremises()
     {
         //var pluginFontCollection = new PrivateFontCollection();
         //pluginFontCollection.AddFontFile("Resources/Inter.ttf");
@@ -19,7 +19,7 @@ public partial class AreaOfThePremises : Form
         DefaultFont = new Font("Inter", 14, FontStyle.Regular, GraphicsUnit.Pixel);
     }
 
-    public AreaOfThePremises(CoefficientsInfo[] defaultAreaCoefficients)
+    public AreaOfPremises(CoefficientsInfo[] defaultAreaCoefficients)
     {
         InitializeComponent();
 

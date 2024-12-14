@@ -12,13 +12,13 @@ namespace AreaCalculationPlugin.Calculator
         public static void Start()
         {
             var defaultAreaCoefficients = GetRoomCoefficients();
-            var mainForm = new AreaOfThePremises(defaultAreaCoefficients);
+            var mainForm = new AreaOfPremises(defaultAreaCoefficients);
             mainForm.Show();
         }
 
         private static CoefficientsInfo[] GetRoomCoefficients()
         {
-            var rm = new ResourceManager(typeof(AreaOfThePremises));
+            var rm = new ResourceManager(typeof(AreaOfPremises));
 
             return rm.GetString("Coefficients").Split("\r\n")
                 .Select(line => line.Split(": "))

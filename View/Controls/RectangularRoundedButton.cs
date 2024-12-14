@@ -33,7 +33,7 @@ public class RectangularRoundedButton : Panel
         Dock = DockStyle.Fill;
         Padding = new Padding(0);
         Margin = new Padding(0);
-        Font = new Font(AreaOfThePremises.DefaultFont.FontFamily, 11, FontStyle.Bold, GraphicsUnit.Pixel);
+        Font = new Font(AreaOfPremises.DefaultFont.FontFamily, 11, FontStyle.Bold, GraphicsUnit.Pixel);
 
         Paint += Background_Paint;
     }

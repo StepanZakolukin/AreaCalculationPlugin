@@ -1,6 +1,6 @@
 ﻿namespace AreaCalculationPlugin.View
 {
-    partial class AreaOfThePremises
+    partial class AreaOfPremises
     {
         /// <summary>
         ///  Required designer variable.

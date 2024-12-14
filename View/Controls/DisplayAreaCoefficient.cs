@@ -130,7 +130,7 @@ internal class DisplayAreaCoefficient : Container
         Margin = new Padding(0, 0, 0, 0);
 
         BackColor = Color.Transparent;
-        Font = new Font(AreaOfThePremises.DefaultFont.FontFamily, FontSize, FontStyle.Bold, GraphicsUnit.Pixel);
+        Font = new Font(AreaOfPremises.DefaultFont.FontFamily, FontSize, FontStyle.Bold, GraphicsUnit.Pixel);
     }
 
     private void SubscribeToEvents()
