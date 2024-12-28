@@ -1,7 +1,6 @@
 ﻿using AreaCalculationPlugin.Model;
 using AreaCalculationPlugin.View;
 using System.Resources;
-
 using Teigha.Runtime;
 
 namespace AreaCalculationPlugin.Calculator
@@ -13,7 +12,7 @@ namespace AreaCalculationPlugin.Calculator
         {
             var defaultAreaCoefficients = GetRoomCoefficients();
             var mainForm = new AreaOfPremises(defaultAreaCoefficients);
-            mainForm.Show();
+            HostMgd.ApplicationServices.Application.ShowModalDialog(mainForm);
         }
 
         private static CoefficientsInfo[] GetRoomCoefficients()
