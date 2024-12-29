@@ -12,6 +12,10 @@ namespace AreaCalculationPlugin.Calculator
         {
             var defaultAreaCoefficients = GetRoomCoefficients();
             var mainForm = new AreaOfPremises(defaultAreaCoefficients);
+            RoomData.ResetParameters();
+            /*var rooms = DataReader.GetRoomData();*/
+            /*mainForm.ChoseRooms += RoomParameterCorrector.PerformCalculations;*/
+
             HostMgd.ApplicationServices.Application.ShowModalDialog(mainForm);
         }
 

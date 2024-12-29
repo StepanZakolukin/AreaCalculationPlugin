@@ -21,6 +21,22 @@
       <HintPath>SDK\hostmgd.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="MapiBaseTypes">
+      <HintPath>SDK\mapibasetypes.dll</HintPath>
+	  <Private>False</Private>
+    </Reference>
+    <Reference Include="mapimgd">
+      <HintPath>SDK\mapimgd.dll</HintPath>
+	  <Private>False</Private>
+    </Reference>
+    <Reference Include="ncBIMSmgd">
+      <HintPath>SDK\ncBIMSmgd.dll</HintPath>
+	  <Private>False</Private>
+    </Reference>
+    <Reference Include="NrxGateMgd">
+      <HintPath>SDK\nrxgatemgd.dll</HintPath>
+	  <Private>False</Private>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>

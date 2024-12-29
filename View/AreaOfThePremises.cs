@@ -9,6 +9,7 @@ public partial class AreaOfPremises : Form
 {
     private Container firstColumn;
     private Container secondColumn;
+    public event Action ChoseRooms;
 
     public static new readonly Font DefaultFont;
     static AreaOfPremises()
