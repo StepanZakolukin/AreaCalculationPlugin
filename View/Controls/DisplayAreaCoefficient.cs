@@ -1,4 +1,4 @@
-﻿using AreaCalculationPlugin.Model;
+﻿using AreaCalculationPlugin.Calculator;
 using AreaCalculationPlugin.View.Extensions;
 using System.Resources;
 
@@ -30,7 +30,7 @@ internal class DisplayAreaCoefficient : Container
     private readonly RoundButton ButtonPlus;
     private readonly RoundButton ButtonMinus;
     private readonly Panel DisplayForCoefficient;
-    public readonly CoefficientsInfo Coefficient;
+    private readonly RoomCategory RoomCategory;
 
     private readonly static Image PlusImage;
     private readonly static Image MinusImage;
@@ -42,17 +42,19 @@ internal class DisplayAreaCoefficient : Container
         PlusImage = (Bitmap)new ImageConverter().ConvertFrom(rm.GetObject("ButtonPlus"));
     }
 
-    public DisplayAreaCoefficient(Padding padding, CoefficientsInfo coefficient, int fontSz = 16)
+    public DisplayAreaCoefficient(Padding padding, RoomCategory roomCategory, int fontSz = 16)
         : base(Color.White)
     {
         Padding = padding;
         fontSize = fontSz;
-        Coefficient = coefficient;
+        RoomCategory = roomCategory;
         ForeColor = ColorTranslator.FromHtml("#515254");
         Format = new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
 
-        Title = new(Coefficient.NameRoomCategory,
-            fontSize: FontSize, FontStyle.Bold) { Margin = new Padding(7, 0, 1, 0) };
+        Title = new($"{RoomCategoryConverter.Convert(roomCategory)}:", fontSize: FontSize, FontStyle.Bold)
+        {
+            Margin = new Padding(7, 0, 1, 0)
+        };
 
         DisplayForCoefficient = new Panel()
         {
@@ -94,7 +96,7 @@ internal class DisplayAreaCoefficient : Container
     private void PrintText(Graphics graphics)
     {
         graphics.DrawString(
-            Math.Round(Coefficient.Coefficient, 1).ToString().Replace(',', '.'),
+            Math.Round(PluginManager.ParameterCorrector.AreaCoefficients[RoomCategory], 1).ToString().Replace(',', '.'),
             Font,
             new SolidBrush(ForeColor),
             new Rectangle(Point.Empty, DisplayForCoefficient.Size),
@@ -141,16 +143,16 @@ internal class DisplayAreaCoefficient : Container
 
     private void IncreaseValue(object? sender, EventArgs e)
     {
-        if (Coefficient.Coefficient + Delta <= 1)
-            Coefficient.Coefficient += Delta;
+        if (PluginManager.ParameterCorrector.AreaCoefficients[RoomCategory] + Delta <= 1)
+            PluginManager.ParameterCorrector.AreaCoefficients[RoomCategory] += Delta;
 
         Invalidate();
     }
 
     private void DecreaseValue(object? sender, EventArgs e)
     {
-        if (Coefficient.Coefficient - Delta > 0.0000001)
-            Coefficient.Coefficient -= Delta;
+        if (PluginManager.ParameterCorrector.AreaCoefficients[RoomCategory] - Delta > 0.0000001)
+            PluginManager.ParameterCorrector.AreaCoefficients[RoomCategory] -= Delta;
 
         Invalidate();
     }

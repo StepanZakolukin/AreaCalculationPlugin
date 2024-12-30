@@ -1,15 +1,14 @@
-using AreaCalculationPlugin.Model;
+using AreaCalculationPlugin.Calculator;
 using AreaCalculationPlugin.View.Controls;
 using AreaCalculationPlugin.View.Extensions;
-using System.Drawing.Text;
 
 namespace AreaCalculationPlugin.View;
 
 public partial class AreaOfPremises : Form
 {
-    private Container firstColumn;
-    private Container secondColumn;
-    public event Action ChoseRooms;
+    private FirstColumn firstColumn;
+    private SecondColumn secondColumn;
+    public event Action<IEnumerable<RoomData>> ChoseRooms;
 
     public static new readonly Font DefaultFont;
     static AreaOfPremises()
@@ -20,14 +19,14 @@ public partial class AreaOfPremises : Form
         DefaultFont = new Font("Inter", 14, FontStyle.Regular, GraphicsUnit.Pixel);
     }
 
-    public AreaOfPremises(CoefficientsInfo[] defaultAreaCoefficients)
+    public AreaOfPremises()
     {
         InitializeComponent();
 
         Text = "Площади помещений";
         FormBorderStyle = FormBorderStyle.Sizable;
 
-        Controls.Add(CreatAGridOfElements(defaultAreaCoefficients));
+        Controls.Add(CreatAGridOfElements());
 
         Padding = new Padding(30, 22, 30, 20);
         SizeChanged += ChangeMarginsOfMainColumns;
@@ -37,7 +36,7 @@ public partial class AreaOfPremises : Form
         NotClientPartOfForm.CustomWindow(ColorTranslator.FromHtml("#F5F6F8"), Handle);
     }
 
-    private Container CreatAGridOfElements(CoefficientsInfo[] defaultAreaCoefficients)
+    private Container CreatAGridOfElements()
     {
         var table = new Container();
 
@@ -49,7 +48,8 @@ public partial class AreaOfPremises : Form
         firstColumn = new FirstColumn();
         table.Controls.Add(firstColumn, 0, 0);
 
-        secondColumn = new SecondColumn(defaultAreaCoefficients);
+        secondColumn = new SecondColumn();
+        secondColumn.ButtonCalculate.Click += ChangeParametersOfPremises;
         table.Controls.Add(secondColumn, 1, 0);
         
         table.Paint += MainTableOnBackgroundPaint;
@@ -58,6 +58,12 @@ public partial class AreaOfPremises : Form
     }
 
     #region Обработчики событий
+    private void ChangeParametersOfPremises(object? sender, EventArgs args)
+    {
+        var rooms = firstColumn.GetCheckedNodes(firstColumn.ListOfPremises.Nodes);
+        ChoseRooms(rooms);
+    }
+
     private void ChangeMarginsOfMainColumns(object? sender, EventArgs e)
     {
         var margin = (int)(16.02 / 768.96 * firstColumn.Height);

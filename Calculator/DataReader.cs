@@ -5,8 +5,9 @@ namespace AreaCalculationPlugin.Calculator;
 
 internal class DataReader
 {
-    public static IEnumerable<RoomData> GetRoomData()
+    public static List<RoomData> GetRoomData()
     {
+        var result = new List<RoomData>();
         var drawingDatabase = HostMgd.ApplicationServices.Application.DocumentManager.MdiActiveDocument.Database;
 
         using var trans = drawingDatabase.TransactionManager.StartTransaction();
@@ -18,7 +19,9 @@ internal class DataReader
             if (id.GetObject(OpenMode.ForRead) is not IParametricObject room) continue;
             var elementData = room.GetElementData();
             if (elementData.Parameters.Any(parameter => parameter.Name == "AEC_ROOM_AREA"))
-                yield return new RoomData(elementData);
+                result.Add(new RoomData(elementData));
         }
+
+        return result;
     }
 }

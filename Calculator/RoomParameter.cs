@@ -2,11 +2,13 @@
 
 public enum RoomParameter
 {
+    ApartmentNumber,
+    RoomType,
     AreaCoefficient,
     AreaWithCoefficient,
     AreaOfApartmentIsResidential,
-    AreaOfApartmentWithLoggiaAndBalcony,
     AreaOfApartment,
     TotalAreaOfApartment,
+    AreaOfApartmentWithLoggiaAndBalcony,
     NumberOfRooms
 }

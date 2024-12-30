@@ -1,4 +1,4 @@
-﻿using AreaCalculationPlugin.Model;
+﻿using AreaCalculationPlugin.Calculator;
 
 namespace AreaCalculationPlugin.View.Controls;
 
@@ -6,23 +6,20 @@ internal class SecondColumn : Container
 {
     private readonly TextBox NumberOfDecimalPlaces;
 
-    private readonly CoefficientsInfo[] DefaultAreaCoefficients;
-
     private RectangularRoundedButton ButtonSettingCoefficient = new()
     {
         Margin = new Padding(0, 0, 5, 10),
         Text = "Настройка коэффициента"
     };
 
-    private RectangularRoundedButton ButtonCalculate = new(ColorTranslator.FromHtml("#EFE650"))
+    public RectangularRoundedButton ButtonCalculate = new(ColorTranslator.FromHtml("#EFE650"))
     {
         Text = "Посчитать",
         Margin = new Padding(0, 0, 5, 0),
     };
 
-    public SecondColumn(CoefficientsInfo[] defaultAreaCoefficients) : base()
+    public SecondColumn() : base()
     {
-        DefaultAreaCoefficients = defaultAreaCoefficients;
         NumberOfDecimalPlaces = new()
         {
             Dock = DockStyle.Fill,
@@ -30,12 +27,12 @@ internal class SecondColumn : Container
             ForeColor = ColorTranslator.FromHtml("#515254"),
             Font = new Font(AreaOfPremises.DefaultFont.FontFamily, 11, FontStyle.Bold, GraphicsUnit.Pixel),
             TextAlign = HorizontalAlignment.Center,
-            Text = "0"
+            Text = PluginManager.ParameterCorrector.NumberOfDecimalPlaces.ToString()
         };
 
         ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
 
-        for (var i = 0; i < 6; i++)
+        for (var i = 0; i < 7; i++)
             RowStyles.Add(new RowStyle(SizeType.Absolute, 49));
         RowStyles.Add(new RowStyle(SizeType.Absolute, 68));
         RowStyles.Add(new RowStyle(SizeType.Absolute, 49));
@@ -50,28 +47,17 @@ internal class SecondColumn : Container
 
     private void RunCoefficientSettingForm(object? sender, EventArgs e)
     {
-        var formForSettingCoefficient = new SettingСoefficient(DefaultAreaCoefficients);
+        var formForSettingCoefficient = new SettingСoefficient();
         formForSettingCoefficient.Show();
     }
 
     private void FillSecondColumn()
     {
-        var titles = new[]
-        {
-            "Параметр номера квартиры",
-            "Параметр типа помещения",
-            "Коэффициент площади",
-            "Площадь с коэффициентом",
-            "Площадь квартиры жилая",
-            "Площадь квартиры",
-            "Площадь квартиры с лоджией и балконом\r\nбез коэф.",
-            "Число комнат"
-        };
-
-        foreach (var cell in titles
+        foreach (var cell in Enumerable.Range(0, 9).Select(num => RoomParameterConverter.Convert((RoomParameter)num))
             .Select(title => new DropdownList(title) { Margin = new Padding(left: 0, top: 0, right: 0, bottom: 4) }))
         {
             Controls.Add(cell);
+            cell.AddRange(RoomData.SharedParameters);
         }
         Controls.Add(CreateRoundingControls());
         Controls.Add(new Panel

@@ -1,12 +1,12 @@
 ﻿namespace AreaCalculationPlugin.Calculator;
 
-public enum RoomType
+public enum RoomCategory
 {
     ResidentialRoom,
     NonResidentialRoom,
     Loggia,
     Balcony,
-    NonResidentialPublicRoom,
+    CommonAreas,
     Office,
     WarmLoggia,
     Invalid

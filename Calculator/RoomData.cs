@@ -5,13 +5,13 @@ namespace AreaCalculationPlugin.Calculator;
 
 public class RoomData
 {
-    public RoomType Type
+    public RoomCategory Type
     {
         get
         {
             if (RoomTypeParameter is not null && int.TryParse(Parameters[RoomTypeParameter].Value, out var digit))
-                return (RoomType)(digit - 1);
-            return RoomType.Invalid;
+                return (RoomCategory)(digit - 1);
+            return RoomCategory.Invalid;
         }
     }
     public string ApartmentNumber
@@ -29,8 +29,6 @@ public class RoomData
     public static HashSet<string> SharedParameters { get; private set; } = new HashSet<string>();
 
     public Dictionary<string, Parameter> Parameters { get; private set; } = new Dictionary<string, Parameter>();
-
-    /*public double AreaWithCoefficient => Area * MainForm.Multiplicators[Type];*/
 
 
     public RoomData(ElementData data)

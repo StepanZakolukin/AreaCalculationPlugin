@@ -1,4 +1,5 @@
-﻿using AreaCalculationPlugin.Model;
+﻿using AreaCalculationPlugin.Calculator;
+using AreaCalculationPlugin.Model;
 using AreaCalculationPlugin.View.Controls;
 using AreaCalculationPlugin.View.Extensions;
 
@@ -8,12 +9,8 @@ public partial class SettingСoefficient : Form
 {
     private RectangularRoundedButton saveButton = new(ColorTranslator.FromHtml("#EFE650")) { Text = "Сохранить" };
 
-    private readonly CoefficientsInfo[] CoefficientsInfo;
-
-    public SettingСoefficient(CoefficientsInfo[] coefficientsInfo)
+    public SettingСoefficient()
     {
-        CoefficientsInfo = coefficientsInfo;
-
         InitializeComponent();
         InitializeControls();
 
@@ -68,14 +65,12 @@ public partial class SettingСoefficient : Form
 
         var row = 0;
         var column = 0;
-        foreach (var coefficient in CoefficientsInfo)
+        foreach (var coefficient in PluginManager.ParameterCorrector.AreaCoefficients)
         {
             mainTable.RowStyles.Add(new RowStyle(SizeType.Absolute, 40));
 
             mainTable.Controls.Add(
-                new DisplayAreaCoefficient(
-                    new Padding(0, 6, 0, 4),
-                    coefficient),
+                new DisplayAreaCoefficient(new Padding(0, 6, 0, 4), coefficient.Key),
                 column, row++);
         }
 

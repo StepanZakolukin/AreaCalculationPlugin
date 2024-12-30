@@ -1,35 +1,44 @@
-﻿using System.Globalization;
+﻿using System.Collections.Immutable;
+using System.Globalization;
 
 namespace AreaCalculationPlugin.Calculator;
 
-internal class RoomParameterCorrector
+public class RoomParameterCorrector
 {
-    private readonly RoomData[] Rooms;
-    private readonly int NumberOfDecimalPlaces;
-    private readonly Dictionary<RoomType, double> AreaCoefficients;
-    private readonly Dictionary<RoomParameter, string> ProjectionOfRoomParameterNames;
+    private int numberOfDecimalPlaces;
+    public int NumberOfDecimalPlaces 
+    {
+        get => numberOfDecimalPlaces;
+        set
+        {
+            if (value > 0) numberOfDecimalPlaces = value;
+        }
+    }
+    public ImmutableArray<RoomData> Rooms { get; private set; }
+    public Dictionary<RoomCategory, double> AreaCoefficients { get; private set; }
+    public Dictionary<RoomParameter, string> ProjectionOfRoomParameterNames { get; private set; }
 
     public RoomParameterCorrector(
-        RoomData[] rooms,
+        IEnumerable<RoomData> rooms,
         int numberOfDecimalPlaces,
-        Dictionary<RoomType, double> areaCoefficients,
+        Dictionary<RoomCategory, double> areaCoefficients,
         Dictionary<RoomParameter, string> projectionOfRoomParameterNames)
     {
-        Rooms = rooms;
+        Rooms = rooms.ToImmutableArray();
         NumberOfDecimalPlaces = numberOfDecimalPlaces;
         AreaCoefficients = areaCoefficients;
         ProjectionOfRoomParameterNames = projectionOfRoomParameterNames;
     }
 
-    public void PerformCalculations()
+    public void PerformCalculations(IEnumerable<RoomData> rooms)
     {
         var editor = HostMgd.ApplicationServices.Application.DocumentManager.MdiActiveDocument.Editor;
 
-        ResetParametersThatNeedToBeCalculated();
+        ResetParametersThatNeedToBeCalculated(rooms);
 
-        foreach (var room in Rooms)
+        foreach (var room in rooms)
         {
-            var apartments = Rooms.Where(r => r.ApartmentNumber == room.ApartmentNumber);
+            var apartments = rooms.Where(r => r.ApartmentNumber == room.ApartmentNumber);
 
             var parameterValue = AreaCoefficients[room.Type].ToString(CultureInfo.InvariantCulture);
             room.ChangeParameter(ProjectionOfRoomParameterNames[RoomParameter.AreaCoefficient], parameterValue);
@@ -37,7 +46,7 @@ internal class RoomParameterCorrector
             parameterValue = (room.Area * AreaCoefficients[room.Type]).ToString($"N{NumberOfDecimalPlaces}", CultureInfo.InvariantCulture);
             room.ChangeParameter(ProjectionOfRoomParameterNames[RoomParameter.AreaWithCoefficient], parameterValue);
 
-            if (ProjectionOfRoomParameterNames[RoomParameter.NumberOfRooms] != null && room.Type == RoomType.ResidentialRoom)
+            if (ProjectionOfRoomParameterNames[RoomParameter.NumberOfRooms] != null && room.Type == RoomCategory.ResidentialRoom)
             {
                 foreach (var e in apartments)
                 {
@@ -46,9 +55,9 @@ internal class RoomParameterCorrector
                 }
             }
 
-            if (room.Type == RoomType.ResidentialRoom || room.Type == RoomType.NonResidentialRoom)
+            if (room.Type == RoomCategory.ResidentialRoom || room.Type == RoomCategory.NonResidentialRoom)
                 CalculateArea(ProjectionOfRoomParameterNames[RoomParameter.AreaOfApartment], apartments, room.Area * AreaCoefficients[room.Type]);
-            if (room.Type == RoomType.ResidentialRoom)
+            if (room.Type == RoomCategory.ResidentialRoom)
                 CalculateArea(ProjectionOfRoomParameterNames[RoomParameter.AreaOfApartmentIsResidential], apartments, room.Area * AreaCoefficients[room.Type]);
             CalculateArea(ProjectionOfRoomParameterNames[RoomParameter.AreaOfApartmentWithLoggiaAndBalcony], apartments, room.Area);
             CalculateArea(ProjectionOfRoomParameterNames[RoomParameter.TotalAreaOfApartment], apartments, room.Area * AreaCoefficients[room.Type]);
@@ -69,9 +78,9 @@ internal class RoomParameterCorrector
         }
     }
 
-    private void ResetParametersThatNeedToBeCalculated()
+    private void ResetParametersThatNeedToBeCalculated(IEnumerable<RoomData> rooms)
     {
-        foreach (var room in Rooms)
+        foreach (var room in rooms)
         {
             room.ChangeParameter(ProjectionOfRoomParameterNames[RoomParameter.NumberOfRooms], "0");
             room.ChangeParameter(ProjectionOfRoomParameterNames[RoomParameter.AreaCoefficient], "0.0");

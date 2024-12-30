@@ -1,4 +1,7 @@
-﻿namespace AreaCalculationPlugin.Model;
+﻿using AreaCalculationPlugin.Calculator;
+using System.Collections.Immutable;
+
+namespace AreaCalculationPlugin.Model;
 
 public class CoefficientsInfo
 {
@@ -18,7 +21,7 @@ public class CoefficientsInfo
         }
     }
 
-    public readonly string NameRoomCategory;
+    public readonly string NameRoomCategory; 
 
     public CoefficientsInfo(string nameRoomCategory, double coefficient)
     {

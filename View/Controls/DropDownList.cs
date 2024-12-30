@@ -5,7 +5,7 @@ public class DropdownList : Container
     protected readonly Heading title;
     public string Title { get { return title.Text; } }
     
-    private ComboBox Items { get; set; }
+    public ComboBox List { get; set; }
 
     public DropdownList(string name) : base(Color.White)
     {
@@ -14,15 +14,15 @@ public class DropdownList : Container
             Text = name,
             //Margin = new Padding(0, 0, 0, 4)
         };
-        Items = new ComboBox();
-        ConfigureList(Items);
+        List = new ComboBox();
+        ConfigureList(List);
 
         ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
         RowStyles.Add(new RowStyle(SizeType.Percent, 100));
         RowStyles.Add(new RowStyle(SizeType.Absolute, 20));
 
         Controls.Add(title);
-        Controls.Add(Items);
+        Controls.Add(List);
     }
 
     private void ConfigureList(ComboBox comboBox)
@@ -36,8 +36,14 @@ public class DropdownList : Container
         comboBox.FlatStyle = FlatStyle.Flat;
     }
 
-    public void Add(Control control)
+    public void Add(string listItem)
     {
-        Items.Items.Add(control);
+        List.Items.Add(listItem);
+    }
+
+    public void AddRange(IEnumerable<string> listItems)
+    {
+        foreach (var item in listItems)
+            List.Items.Add(item);
     }
 }

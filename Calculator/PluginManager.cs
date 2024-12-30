@@ -1,32 +1,39 @@
-﻿using AreaCalculationPlugin.Model;
-using AreaCalculationPlugin.View;
+﻿using AreaCalculationPlugin.View;
 using System.Resources;
 using Teigha.Runtime;
 
-namespace AreaCalculationPlugin.Calculator
+namespace AreaCalculationPlugin.Calculator;
+
+public class PluginManager
 {
-    public class PluginManager
+    public static RoomParameterCorrector ParameterCorrector;
+
+    static PluginManager()
     {
-        [CommandMethod("AreaCalc")]
-        public static void Start()
+        var rooms = DataReader.GetRoomData();
+        var defaultAreaCoefficients = new Dictionary<RoomCategory, double>()
         {
-            var defaultAreaCoefficients = GetRoomCoefficients();
-            var mainForm = new AreaOfPremises(defaultAreaCoefficients);
-            RoomData.ResetParameters();
-            /*var rooms = DataReader.GetRoomData();*/
-            /*mainForm.ChoseRooms += RoomParameterCorrector.PerformCalculations;*/
+            { RoomCategory.ResidentialRoom, 1 },
+            { RoomCategory.NonResidentialRoom, 1 },
+            { RoomCategory.Loggia, 0.5 },
+            { RoomCategory.Balcony, 0.3 },
+            { RoomCategory.CommonAreas, 1},
+            { RoomCategory.Office, 1 },
+            { RoomCategory.WarmLoggia, 1 }
+        };
+        var projectionOfRoomParameterNames = Enumerable.Range(0, 9)
+            .ToDictionary(num => (RoomParameter)num, num => string.Empty);
+        ParameterCorrector = new RoomParameterCorrector(rooms, 2, defaultAreaCoefficients, projectionOfRoomParameterNames);
+    }
 
-            HostMgd.ApplicationServices.Application.ShowModalDialog(mainForm);
-        }
 
-        private static CoefficientsInfo[] GetRoomCoefficients()
-        {
-            var rm = new ResourceManager(typeof(AreaOfPremises));
+    [CommandMethod("AreaCalc")]
+    public static void Start()
+    {
+        var mainForm = new AreaOfPremises();
+        RoomData.ResetParameters();
+        /*mainForm.ChoseRooms += parameterCorrector.PerformCalculations;*/
 
-            return rm.GetString("Coefficients").Split("\r\n")
-                .Select(line => line.Split(": "))
-                .Select(array => new CoefficientsInfo(array.First(), double.Parse(array.Last())))
-                .ToArray();
-        }
+        HostMgd.ApplicationServices.Application.ShowModalDialog(mainForm);
     }
 }

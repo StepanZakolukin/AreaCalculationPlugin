@@ -1,10 +1,11 @@
-﻿using AreaCalculationPlugin.View.Extensions;
+﻿using AreaCalculationPlugin.Calculator;
+using AreaCalculationPlugin.View.Extensions;
 
 namespace AreaCalculationPlugin.View.Controls;
 
 internal class FirstColumn : Container
 {
-    private readonly TreeView ListOfPremises;
+    public TreeView ListOfPremises { get; private set; }
     private readonly List<DropdownListForGrouping> groupingParameters;
     private static readonly string[] HeadersOfGroupingControls = new[] { "Группировать", "Затем по", "Затем по" };
 
@@ -45,22 +46,93 @@ internal class FirstColumn : Container
         };
 
         groupingParameters = new();
+        GroupByParameters(Array.Empty<string>());
 
         FillInTheFirstColumn();
         SubscribeToEvents();
-
-        FillInTheTestData();
     }
 
-    public void FillInTheTestData()
+    public void UpdateTreeView(object? sender, EventArgs args)
     {
-        for (var i = 0; i < 10; i++)
+        var list = groupingParameters
+            .Where(param => param.List.SelectedIndex != -1)
+            .Select(parameter => parameter.List.SelectedItem.ToString())
+            .ToArray();
+
+        GroupByParameters(list);
+    }
+
+    public void GroupByParameters(string[] parameters)
+    {
+        ListOfPremises.Nodes.Clear();
+
+        if (parameters.Length > 0)
         {
-            ListOfPremises.Nodes.Add(i.ToString());
-            ListOfPremises.Nodes[i].Nodes.Add(i.ToString());
-            ListOfPremises.Nodes[i].Nodes.Add($"{i + 1}");
+            var rootDict = new Dictionary<string, TreeNode>();
+
+            foreach (var room in PluginManager.ParameterCorrector.Rooms)
+            {
+                if (!rootDict.ContainsKey(room.Parameters[parameters[0]].Value))
+                {
+                    rootDict[room.Parameters[parameters[0]].Value] = new TreeNode(room.Parameters[parameters[0]].Value);
+                    ListOfPremises.Nodes.Add(rootDict[room.Parameters[parameters[0]].Value]);
+                }
+                var node = rootDict[room.Parameters[parameters[0]].Value];
+
+                for (int i = 1; i < parameters.Length; i++)
+                {
+                    node.Tag ??= new Dictionary<string, TreeNode>();
+
+                    var dict = (Dictionary<string, TreeNode>)node.Tag;
+
+                    if (!dict.ContainsKey(room.Parameters[parameters[i]].Value))
+                    {
+                        dict[room.Parameters[parameters[i]].Value] = new TreeNode(room.Parameters[parameters[i]].Value);
+                        node.Nodes.Add(dict[room.Parameters[parameters[i]].Value]);
+                    }
+
+                    node = dict[room.Parameters[parameters[i]].Value];
+                }
+
+                var roomNode = new TreeNode($"{room.Type}")
+                {
+                    Tag = room
+                };
+                node.Nodes.Add(roomNode);
+            }
+        }
+        else
+        {
+            foreach (var room in PluginManager.ParameterCorrector.Rooms)
+            {
+                var roomNode = new TreeNode($"{room.Type}")
+                {
+                    Tag = room
+                };
+                ListOfPremises.Nodes.Add(roomNode);
+            }
         }
     }
+
+    public HashSet<RoomData> GetCheckedNodes(TreeNodeCollection nodes)
+    {
+        var result = new HashSet<RoomData>();
+
+        foreach (TreeNode node in nodes)
+        {
+            if (node.Checked)
+            {
+                if (node.Tag is RoomData roomData)
+                    result.Add(roomData);
+
+                if (node.Nodes.Count > 0)
+                    result.UnionWith(GetCheckedNodes(node.Nodes));
+            }
+        }
+
+        return result;
+    }
+
     private void SubscribeToEvents()
     {
         ButtonHideEverything.Click += HideEverything_Click;
@@ -118,6 +190,8 @@ internal class FirstColumn : Container
         {
             Controls.Add(dropdownList);
             groupingParameters.Add(dropdownList);
+            dropdownList.AddRange(RoomData.SharedParameters);
+            dropdownList.List.SelectedIndexChanged += UpdateTreeView;
         }
 
         Controls.Add(CreateContainer());
