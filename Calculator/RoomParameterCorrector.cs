@@ -1,5 +1,4 @@
-﻿using System.Collections.Immutable;
-using System.Globalization;
+﻿using System.Globalization;
 
 namespace AreaCalculationPlugin.Calculator;
 
@@ -14,17 +13,15 @@ public class RoomParameterCorrector
             if (value > 0) numberOfDecimalPlaces = value;
         }
     }
-    public ImmutableArray<RoomData> Rooms { get; private set; }
+    
     public Dictionary<RoomCategory, double> AreaCoefficients { get; private set; }
     public Dictionary<RoomParameter, string> ProjectionOfRoomParameterNames { get; private set; }
 
     public RoomParameterCorrector(
-        IEnumerable<RoomData> rooms,
         int numberOfDecimalPlaces,
         Dictionary<RoomCategory, double> areaCoefficients,
         Dictionary<RoomParameter, string> projectionOfRoomParameterNames)
     {
-        Rooms = rooms.ToImmutableArray();
         NumberOfDecimalPlaces = numberOfDecimalPlaces;
         AreaCoefficients = areaCoefficients;
         ProjectionOfRoomParameterNames = projectionOfRoomParameterNames;

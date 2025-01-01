@@ -1,15 +1,17 @@
 ﻿using AreaCalculationPlugin.View;
+using System.Collections.Immutable;
 using Teigha.Runtime;
 
 namespace AreaCalculationPlugin.Calculator;
 
 public class PluginManager
 {
-    public static RoomParameterCorrector ParameterCorrector;
+    public static ImmutableArray<RoomData> Rooms { get; }
+    public static RoomParameterCorrector ParameterCorrector { get; }
 
     static PluginManager()
     {
-        var rooms = DataReader.GetRoomData();
+        Rooms = DataReader.GetRoomData().ToImmutableArray(); ;
         var defaultAreaCoefficients = new Dictionary<RoomCategory, double>()
         {
             { RoomCategory.ResidentialRoom, 1 },
@@ -22,7 +24,7 @@ public class PluginManager
         };
         var projectionOfRoomParameterNames = Enumerable.Range(0, 9)
             .ToDictionary(num => (RoomParameter)num, num => string.Empty);
-        ParameterCorrector = new RoomParameterCorrector(rooms, 2, defaultAreaCoefficients, projectionOfRoomParameterNames);
+        ParameterCorrector = new RoomParameterCorrector(2, defaultAreaCoefficients, projectionOfRoomParameterNames);
     }
 
 

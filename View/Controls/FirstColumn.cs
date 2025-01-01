@@ -70,7 +70,7 @@ internal class FirstColumn : Container
         {
             var rootDict = new Dictionary<string, TreeNode>();
 
-            foreach (var room in PluginManager.ParameterCorrector.Rooms)
+            foreach (var room in PluginManager.Rooms)
             {
                 if (!rootDict.ContainsKey(room.GetParameterValue(parameters[0])))
                 {
@@ -105,7 +105,7 @@ internal class FirstColumn : Container
         }
         else
         {
-            foreach (var room in PluginManager.ParameterCorrector.Rooms)
+            foreach (var room in PluginManager.Rooms)
             {
                 var roomNode = new TreeNode(room.GetParameterValue("AEC_ROOM_NAME"))
                 {
