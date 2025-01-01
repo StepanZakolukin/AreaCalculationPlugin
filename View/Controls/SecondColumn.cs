@@ -61,7 +61,7 @@ internal class SecondColumn : Container
     private void RunCoefficientSettingForm(object? sender, EventArgs e)
     {
         var formForSettingCoefficient = new SettingСoefficient();
-        formForSettingCoefficient.Show();
+        formForSettingCoefficient.ShowDialog();
     }
 
     private void FillSecondColumn()
