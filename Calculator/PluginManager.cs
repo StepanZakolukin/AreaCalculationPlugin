@@ -1,5 +1,4 @@
 ﻿using AreaCalculationPlugin.View;
-using System.Resources;
 using Teigha.Runtime;
 
 namespace AreaCalculationPlugin.Calculator;
@@ -32,7 +31,7 @@ public class PluginManager
     {
         var mainForm = new AreaOfPremises();
         RoomData.ResetParameters();
-        /*mainForm.ChoseRooms += parameterCorrector.PerformCalculations;*/
+        mainForm.ChoseRooms += ParameterCorrector.PerformCalculations;
 
         HostMgd.ApplicationServices.Application.ShowModalDialog(mainForm);
     }

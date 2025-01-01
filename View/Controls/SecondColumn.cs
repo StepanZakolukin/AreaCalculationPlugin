@@ -5,6 +5,7 @@ namespace AreaCalculationPlugin.View.Controls;
 internal class SecondColumn : Container
 {
     private readonly TextBox NumberOfDecimalPlaces;
+    private readonly List<DropDownListForSettingRoomParameters> RoomParameters = new();
 
     private RectangularRoundedButton ButtonSettingCoefficient = new()
     {
@@ -53,12 +54,20 @@ internal class SecondColumn : Container
 
     private void FillSecondColumn()
     {
-        foreach (var cell in Enumerable.Range(0, 9).Select(num => RoomParameterConverter.Convert((RoomParameter)num))
-            .Select(title => new DropdownList(title) { Margin = new Padding(left: 0, top: 0, right: 0, bottom: 4) }))
+        foreach (var cell in Enumerable.Range(0, 9)
+            .Select(num => new DropDownListForSettingRoomParameters((RoomParameter)num)))
         {
             Controls.Add(cell);
+            RoomParameters.Add(cell);
             cell.AddRange(RoomData.SharedParameters);
         }
+
+        var parameters = RoomParameters
+            .Where(param => param.RoomParameter == RoomParameter.RoomType ||
+            param.RoomParameter == RoomParameter.ApartmentNumber);
+        foreach (var roomParameter in parameters)
+            roomParameter.SelectedIndexChanged += UpdateTypeAndRoomNumber;
+
         Controls.Add(CreateRoundingControls());
         Controls.Add(new Panel
         {
@@ -69,6 +78,14 @@ internal class SecondColumn : Container
         });
         foreach (var cell in СreateAKeypadForTheSecondColumn())
             Controls.Add(cell);
+    }
+
+    private void UpdateTypeAndRoomNumber(object? sender, EventArgs e)
+    {
+        var dropDownList = sender as DropDownListForSettingRoomParameters;
+        if (dropDownList != null && dropDownList.RoomParameter == RoomParameter.RoomType)
+            RoomData.RoomTypeParameter = dropDownList.List.SelectedItem.ToString();
+        //else нужно обновить отображенеие treeView
     }
 
     Container CreateRoundingControls()
