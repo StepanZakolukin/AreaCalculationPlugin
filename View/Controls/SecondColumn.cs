@@ -50,14 +50,12 @@ internal class SecondColumn : Container
 
     private void UnlockButtonCalculate(object? sender, EventArgs args)
     {
-        var button = sender as RectangularRoundedButton;
-        if (button == null) throw new ArgumentException("Аргумент имеет некоректный тип данных", nameof(sender));
         if (RoomParameters.All(param => param.List.SelectedItem != null) &&
             NumberOfDecimalPlaces.BackColor != Color.Red)
         {
-            button.Enabled = true;
+            ButtonCalculate.Enabled = true;
         }
-        else button.Enabled= false;
+        else ButtonCalculate.Enabled= false;
     }
 
     private void UpdateRoundingRules(object? sender, EventArgs e)
