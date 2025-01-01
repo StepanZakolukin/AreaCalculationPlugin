@@ -1,5 +1,4 @@
 ﻿using AreaCalculationPlugin.Calculator;
-using Microsoft.VisualBasic;
 
 namespace AreaCalculationPlugin.View.Controls;
 
@@ -18,6 +17,7 @@ internal class SecondColumn : Container
     {
         Text = "Посчитать",
         Margin = new Padding(0, 0, 5, 0),
+        Enabled = false
     };
 
     public SecondColumn() : base()
@@ -48,12 +48,24 @@ internal class SecondColumn : Container
         NumberOfDecimalPlaces.TextChanged += UpdateRoundingRules;
     }
 
+    private void UnlockButtonCalculate(object? sender, EventArgs args)
+    {
+        var button = sender as RectangularRoundedButton;
+        if (button == null) throw new ArgumentException("Аргумент имеет некоректный тип данных", nameof(sender));
+        if (RoomParameters.All(param => param.List.SelectedItem != null) &&
+            NumberOfDecimalPlaces.BackColor != Color.Red)
+        {
+            button.Enabled = true;
+        }
+        else button.Enabled= false;
+    }
+
     private void UpdateRoundingRules(object? sender, EventArgs e)
     {
         if (int.TryParse(NumberOfDecimalPlaces.Text, out var number) && number >= 0)
         {
             PluginManager.ParameterCorrector.NumberOfDecimalPlaces = number;
-            NumberOfDecimalPlaces.BackColor = Color.White;
+            NumberOfDecimalPlaces.BackColor = ColorTranslator.FromHtml("#F5F6F8");
         }
         else NumberOfDecimalPlaces.BackColor = Color.Red;
     }
@@ -72,6 +84,7 @@ internal class SecondColumn : Container
             Controls.Add(cell);
             RoomParameters.Add(cell);
             cell.AddRange(RoomData.SharedParameters);
+            cell.List.SelectedIndexChanged += UnlockButtonCalculate;
         }
 
         RoomParameters
@@ -92,8 +105,7 @@ internal class SecondColumn : Container
 
     private void UpdateRoomType(object? sender, EventArgs e)
     {
-        var dropDownList = sender as DropDownListForSettingRoomParameters;
-        if (dropDownList != null && dropDownList.RoomParameter == RoomParameter.RoomType)
+        if (sender is DropDownListForSettingRoomParameters dropDownList && dropDownList.RoomParameter == RoomParameter.RoomType)
             RoomData.RoomTypeParameter = dropDownList.List.SelectedItem.ToString();
     }
 

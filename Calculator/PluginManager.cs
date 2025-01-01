@@ -6,11 +6,13 @@ namespace AreaCalculationPlugin.Calculator;
 
 public class PluginManager
 {
-    public static ImmutableArray<RoomData> Rooms { get; }
-    public static RoomParameterCorrector ParameterCorrector { get; }
+    public static ImmutableArray<RoomData> Rooms { get; private set; }
+    public static RoomParameterCorrector ParameterCorrector { get; private set; }
 
-    static PluginManager()
+    [CommandMethod("AreaCalc")]
+    public static void Start()
     {
+        RoomData.ResetParameters();
         Rooms = DataReader.GetRoomData().ToImmutableArray(); ;
         var defaultAreaCoefficients = new Dictionary<RoomCategory, double>()
         {
@@ -25,14 +27,8 @@ public class PluginManager
         var projectionOfRoomParameterNames = Enumerable.Range(0, 9)
             .ToDictionary(num => (RoomParameter)num, num => string.Empty);
         ParameterCorrector = new RoomParameterCorrector(2, defaultAreaCoefficients, projectionOfRoomParameterNames);
-    }
 
-
-    [CommandMethod("AreaCalc")]
-    public static void Start()
-    {
         var mainForm = new AreaOfPremises();
-        RoomData.ResetParameters();
         mainForm.ChoseRooms += ParameterCorrector.PerformCalculations;
 
         HostMgd.ApplicationServices.Application.ShowModalDialog(mainForm);
