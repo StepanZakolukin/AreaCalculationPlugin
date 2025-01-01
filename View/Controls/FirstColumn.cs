@@ -96,7 +96,7 @@ internal class FirstColumn : Container
                     node = dict[room.GetParameterValue(parameters[i])];
                 }
 
-                var roomNode = new TreeNode($"{room.Type}")
+                var roomNode = new TreeNode(room.GetParameterValue("AEC_ROOM_NAME"))
                 {
                     Tag = room
                 };
@@ -107,7 +107,7 @@ internal class FirstColumn : Container
         {
             foreach (var room in PluginManager.ParameterCorrector.Rooms)
             {
-                var roomNode = new TreeNode($"{room.Type}")
+                var roomNode = new TreeNode(room.GetParameterValue("AEC_ROOM_NAME"))
                 {
                     Tag = room
                 };

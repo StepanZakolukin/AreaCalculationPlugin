@@ -13,9 +13,6 @@ public partial class AreaOfPremises : Form
     public static new readonly Font DefaultFont;
     static AreaOfPremises()
     {
-        //var pluginFontCollection = new PrivateFontCollection();
-        //pluginFontCollection.AddFontFile("Resources/Inter.ttf");
-        //DefaultFont = new Font(pluginFontCollection.Families[0], 14, FontStyle.Regular, GraphicsUnit.Pixel);
         DefaultFont = new Font("Inter", 14, FontStyle.Regular, GraphicsUnit.Pixel);
     }
 

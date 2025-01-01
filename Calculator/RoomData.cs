@@ -52,7 +52,8 @@ public class RoomData
 
     public string GetParameterValue(string? parameterName)
     {
-        if (parameterName is null) throw new ArgumentNullException(nameof(parameterName));
+        if (parameterName is null || !Parameters.ContainsKey(parameterName))
+            throw new ArgumentException("Параметр не найден или равен null", nameof(parameterName));
         return Parameters[parameterName].Value;
     }
 }

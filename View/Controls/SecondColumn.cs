@@ -1,4 +1,5 @@
 ﻿using AreaCalculationPlugin.Calculator;
+using Microsoft.VisualBasic;
 
 namespace AreaCalculationPlugin.View.Controls;
 
@@ -44,6 +45,17 @@ internal class SecondColumn : Container
 
         FillSecondColumn();
         ButtonSettingCoefficient.Click += RunCoefficientSettingForm;
+        NumberOfDecimalPlaces.TextChanged += UpdateRoundingRules;
+    }
+
+    private void UpdateRoundingRules(object? sender, EventArgs e)
+    {
+        if (int.TryParse(NumberOfDecimalPlaces.Text, out var number) && number >= 0)
+        {
+            PluginManager.ParameterCorrector.NumberOfDecimalPlaces = number;
+            NumberOfDecimalPlaces.BackColor = Color.White;
+        }
+        else NumberOfDecimalPlaces.BackColor = Color.Red;
     }
 
     private void RunCoefficientSettingForm(object? sender, EventArgs e)
@@ -62,11 +74,9 @@ internal class SecondColumn : Container
             cell.AddRange(RoomData.SharedParameters);
         }
 
-        var parameters = RoomParameters
-            .Where(param => param.RoomParameter == RoomParameter.RoomType ||
-            param.RoomParameter == RoomParameter.ApartmentNumber);
-        foreach (var roomParameter in parameters)
-            roomParameter.SelectedIndexChanged += UpdateTypeAndRoomNumber;
+        RoomParameters
+            .Where(param => param.RoomParameter == RoomParameter.RoomType)
+            .First().SelectedIndexChanged += UpdateRoomType;
 
         Controls.Add(CreateRoundingControls());
         Controls.Add(new Panel
@@ -80,12 +90,11 @@ internal class SecondColumn : Container
             Controls.Add(cell);
     }
 
-    private void UpdateTypeAndRoomNumber(object? sender, EventArgs e)
+    private void UpdateRoomType(object? sender, EventArgs e)
     {
         var dropDownList = sender as DropDownListForSettingRoomParameters;
         if (dropDownList != null && dropDownList.RoomParameter == RoomParameter.RoomType)
             RoomData.RoomTypeParameter = dropDownList.List.SelectedItem.ToString();
-        //else нужно обновить отображенеие treeView
     }
 
     Container CreateRoundingControls()
