@@ -72,12 +72,14 @@ internal class FirstColumn : Container
 
             foreach (var room in PluginManager.ParameterCorrector.Rooms)
             {
-                if (!rootDict.ContainsKey(room.Parameters[parameters[0]].Value))
+                if (!rootDict.ContainsKey(room.GetParameterValue(parameters[0])))
                 {
-                    rootDict[room.Parameters[parameters[0]].Value] = new TreeNode(room.Parameters[parameters[0]].Value);
-                    ListOfPremises.Nodes.Add(rootDict[room.Parameters[parameters[0]].Value]);
+                    var paramValue = room.GetParameterValue(parameters[0]);
+                    rootDict[paramValue] = new TreeNode(paramValue);
+                    ListOfPremises.Nodes.Add(rootDict[paramValue]);
                 }
-                var node = rootDict[room.Parameters[parameters[0]].Value];
+
+                var node = rootDict[room.GetParameterValue(parameters[0])];
 
                 for (int i = 1; i < parameters.Length; i++)
                 {
@@ -85,13 +87,13 @@ internal class FirstColumn : Container
 
                     var dict = (Dictionary<string, TreeNode>)node.Tag;
 
-                    if (!dict.ContainsKey(room.Parameters[parameters[i]].Value))
+                    if (!dict.ContainsKey(room.GetParameterValue(parameters[i])))
                     {
-                        dict[room.Parameters[parameters[i]].Value] = new TreeNode(room.Parameters[parameters[i]].Value);
-                        node.Nodes.Add(dict[room.Parameters[parameters[i]].Value]);
+                        dict[room.GetParameterValue(parameters[i])] = new TreeNode(room.GetParameterValue(parameters[i]));
+                        node.Nodes.Add(dict[room.GetParameterValue(parameters[i])]);
                     }
 
-                    node = dict[room.Parameters[parameters[i]].Value];
+                    node = dict[room.GetParameterValue(parameters[i])];
                 }
 
                 var roomNode = new TreeNode($"{room.Type}")

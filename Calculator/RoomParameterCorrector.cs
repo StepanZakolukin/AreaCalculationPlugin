@@ -38,7 +38,7 @@ public class RoomParameterCorrector
 
         foreach (var room in rooms)
         {
-            var apartments = rooms.Where(r => r.ApartmentNumber == room.ApartmentNumber);
+            var apartments = rooms.Where(r => r.GetParameterValue(ProjectionOfRoomParameterNames[RoomParameter.ApartmentNumber]) == room.GetParameterValue(ProjectionOfRoomParameterNames[RoomParameter.ApartmentNumber]));
 
             var parameterValue = AreaCoefficients[room.Type].ToString(CultureInfo.InvariantCulture);
             room.ChangeParameter(ProjectionOfRoomParameterNames[RoomParameter.AreaCoefficient], parameterValue);
@@ -50,8 +50,8 @@ public class RoomParameterCorrector
             {
                 foreach (var e in apartments)
                 {
-                    var param = e.Parameters[ProjectionOfRoomParameterNames[RoomParameter.NumberOfRooms]];
-                    param.Value = (int.Parse(param.Value) + 1).ToString(CultureInfo.InvariantCulture);
+                    var paramName = ProjectionOfRoomParameterNames[RoomParameter.NumberOfRooms];
+                    e.ChangeParameter(paramName, (int.Parse(e.GetParameterValue(paramName)) + 1).ToString(CultureInfo.InvariantCulture));
                 }
             }
 
@@ -72,9 +72,9 @@ public class RoomParameterCorrector
 
         foreach (var room in rooms)
         {
-            var param = room.Parameters[parameterName];
-            param.Value = (double.Parse(param.Value ?? "0.0", CultureInfo.InvariantCulture) + areaOfCrrentRoom)
-                .ToString($"N{NumberOfDecimalPlaces}", CultureInfo.InvariantCulture);
+            var param = room.GetParameterValue(parameterName);
+            room.ChangeParameter(parameterName, (double.Parse(param ?? "0.0", CultureInfo.InvariantCulture) + areaOfCrrentRoom)
+                .ToString($"N{NumberOfDecimalPlaces}", CultureInfo.InvariantCulture));
         }
     }
 

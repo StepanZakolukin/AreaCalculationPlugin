@@ -14,22 +14,13 @@ public class RoomData
             return RoomCategory.Invalid;
         }
     }
-    public string ApartmentNumber
-    {
-        get
-        {
-            if (ApartmentNumberParameter is null) return string.Empty;
-            return Parameters[ApartmentNumberParameter].Value;
-        }
-    }
+    
     public static string? RoomTypeParameter { get; set; }
-    public static string? ApartmentNumberParameter { get; set; }
     public double Area { get; private set; }
 
     public static HashSet<string> SharedParameters { get; private set; } = new HashSet<string>();
 
-    public Dictionary<string, Parameter> Parameters { get; private set; } = new Dictionary<string, Parameter>();
-
+    private Dictionary<string, Parameter> Parameters { get; set; } = new Dictionary<string, Parameter>();
 
     public RoomData(ElementData data)
     {
@@ -57,5 +48,11 @@ public class RoomData
     {
         if (parameterName is null) return;
         Parameters[parameterName].Value = parameterValue;
+    }
+
+    public string GetParameterValue(string? parameterName)
+    {
+        if (parameterName is null) throw new ArgumentNullException(nameof(parameterName));
+        return Parameters[parameterName].Value;
     }
 }

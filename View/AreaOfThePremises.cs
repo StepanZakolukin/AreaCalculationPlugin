@@ -61,7 +61,11 @@ public partial class AreaOfPremises : Form
     private void ChangeParametersOfPremises(object? sender, EventArgs args)
     {
         var rooms = firstColumn.GetCheckedNodes(firstColumn.ListOfPremises.Nodes);
-        if (ChoseRooms is not null) ChoseRooms(rooms);
+        if (ChoseRooms is not null)
+        {
+            ChoseRooms(rooms);
+            Close();
+        }
     }
 
     private void ChangeMarginsOfMainColumns(object? sender, EventArgs e)
