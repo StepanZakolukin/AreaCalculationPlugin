@@ -14,4 +14,13 @@ internal static class TreeNodeExtension
                 node.CheckAllChildNodes(nodeChecked);
         }
     }
+
+    public static void AddNode(this TreeNode treeView, string text, object tag)
+    {
+        var roomNode = new TreeNode(text)
+        {
+            Tag = tag,
+        };
+        treeView.Nodes.Add(roomNode);
+    }
 }

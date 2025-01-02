@@ -110,7 +110,14 @@ internal class FirstColumn : Container
                 node = dict[room.GetParameterValue(parameters[i])];
             }
 
-            ListOfPremises.AddNode(room.GetParameterValue("AEC_ROOM_NAME"), room);
+            //
+            /*var roomNode = new TreeNode(room.GetParameterValue("AEC_ROOM_NAME"))
+            {
+                Tag = room
+            };
+            node.Nodes.Add(roomNode);
+            //*/
+            node.AddNode(room.GetParameterValue("AEC_ROOM_NAME"), room);
         }
     }
 
