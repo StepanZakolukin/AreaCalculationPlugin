@@ -42,7 +42,8 @@ internal class FirstColumn : Container
             CheckBoxes = true,
             ShowLines = false,
             Scrollable = true,
-            Font = new Font(AreaOfPremises.DefaultFont.FontFamily, 11, FontStyle.Bold, GraphicsUnit.Pixel)
+            Font = new Font(AreaOfPremises.DefaultFont.FontFamily, 11, FontStyle.Bold, GraphicsUnit.Pixel),
+            ItemHeight = 21
         };
 
         groupingParameters = new();
@@ -109,7 +110,7 @@ internal class FirstColumn : Container
             {
                 var roomNode = new TreeNode(room.GetParameterValue("AEC_ROOM_NAME"))
                 {
-                    Tag = room
+                    Tag = room,
                 };
                 ListOfPremises.Nodes.Add(roomNode);
             }
