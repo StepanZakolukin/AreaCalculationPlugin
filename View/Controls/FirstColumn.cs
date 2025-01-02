@@ -1,7 +1,5 @@
 ﻿using AreaCalculationPlugin.Calculator;
 using AreaCalculationPlugin.View.Extensions;
-using Teigha.DatabaseServices;
-using static Multicad.DatabaseServices.McDbObject;
 
 namespace AreaCalculationPlugin.View.Controls;
 
@@ -57,15 +55,15 @@ internal class FirstColumn : Container
 
     public void UpdateTreeView(object? sender, EventArgs args)
     {
-        var list = groupingParameters
+        var array = groupingParameters
             .Where(param => param.List.SelectedIndex != -1)
             .Select(parameter => parameter.List.SelectedItem.ToString())
             .ToArray();
 
-        GroupByParameters(list);
+        GroupByParameters(array);
     }
 
-    public void GroupByParameters(string[] parameters)
+    public void GroupByParameters(string?[] parameters)
     {
         ListOfPremises.Nodes.Clear();
 
@@ -110,13 +108,6 @@ internal class FirstColumn : Container
                 node = dict[room.GetParameterValue(parameters[i])];
             }
 
-            //
-            /*var roomNode = new TreeNode(room.GetParameterValue("AEC_ROOM_NAME"))
-            {
-                Tag = room
-            };
-            node.Nodes.Add(roomNode);
-            //*/
             node.AddNode(room.GetParameterValue("AEC_ROOM_NAME"), room);
         }
     }

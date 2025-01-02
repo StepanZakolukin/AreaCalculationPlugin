@@ -45,10 +45,10 @@ public class RoomParameterCorrector
 
             if (ProjectionOfRoomParameterNames[RoomParameter.NumberOfRooms] != null && room.Type == RoomCategory.ResidentialRoom)
             {
-                foreach (var e in apartments)
+                foreach (var r in apartments)
                 {
                     var paramName = ProjectionOfRoomParameterNames[RoomParameter.NumberOfRooms];
-                    e.ChangeParameter(paramName, (int.Parse(e.GetParameterValue(paramName)) + 1).ToString(CultureInfo.InvariantCulture));
+                    r.ChangeParameter(paramName, (int.Parse(r.GetParameterValue(paramName)) + 1).ToString(CultureInfo.InvariantCulture));
                 }
             }
 
