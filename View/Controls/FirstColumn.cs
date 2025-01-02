@@ -1,5 +1,7 @@
 ﻿using AreaCalculationPlugin.Calculator;
 using AreaCalculationPlugin.View.Extensions;
+using Teigha.DatabaseServices;
+using static Multicad.DatabaseServices.McDbObject;
 
 namespace AreaCalculationPlugin.View.Controls;
 
@@ -68,52 +70,47 @@ internal class FirstColumn : Container
         ListOfPremises.Nodes.Clear();
 
         if (parameters.Length > 0)
-        {
-            var rootDict = new Dictionary<string, TreeNode>();
-
-            foreach (var room in PluginManager.Rooms)
-            {
-                if (!rootDict.ContainsKey(room.GetParameterValue(parameters[0])))
-                {
-                    var paramValue = room.GetParameterValue(parameters[0]);
-                    rootDict[paramValue] = new TreeNode(paramValue);
-                    ListOfPremises.Nodes.Add(rootDict[paramValue]);
-                }
-
-                var node = rootDict[room.GetParameterValue(parameters[0])];
-
-                for (int i = 1; i < parameters.Length; i++)
-                {
-                    node.Tag ??= new Dictionary<string, TreeNode>();
-
-                    var dict = (Dictionary<string, TreeNode>)node.Tag;
-
-                    if (!dict.ContainsKey(room.GetParameterValue(parameters[i])))
-                    {
-                        dict[room.GetParameterValue(parameters[i])] = new TreeNode(room.GetParameterValue(parameters[i]));
-                        node.Nodes.Add(dict[room.GetParameterValue(parameters[i])]);
-                    }
-
-                    node = dict[room.GetParameterValue(parameters[i])];
-                }
-
-                var roomNode = new TreeNode(room.GetParameterValue("AEC_ROOM_NAME"))
-                {
-                    Tag = room
-                };
-                node.Nodes.Add(roomNode);
-            }
-        }
+            FillInWithGrouping(parameters);
         else
+            FillInWithoutGrouping();
+    }
+
+    private void FillInWithoutGrouping()
+    {
+        foreach (var room in PluginManager.Rooms)
+            ListOfPremises.AddNode(room.GetParameterValue("AEC_ROOM_NAME"), room);
+    }
+
+    private void FillInWithGrouping(string[] parameters)
+    {
+        var rootDict = new Dictionary<string, TreeNode>();
+
+        foreach (var room in PluginManager.Rooms)
         {
-            foreach (var room in PluginManager.Rooms)
+            if (!rootDict.ContainsKey(room.GetParameterValue(parameters[0])))
             {
-                var roomNode = new TreeNode(room.GetParameterValue("AEC_ROOM_NAME"))
-                {
-                    Tag = room,
-                };
-                ListOfPremises.Nodes.Add(roomNode);
+                var paramValue = room.GetParameterValue(parameters[0]);
+                rootDict[paramValue] = new TreeNode(paramValue);
+                ListOfPremises.Nodes.Add(rootDict[paramValue]);
             }
+
+            var node = rootDict[room.GetParameterValue(parameters[0])];
+
+            for (int i = 1; i < parameters.Length; i++)
+            {
+                node.Tag ??= new Dictionary<string, TreeNode>();
+                var dict = (Dictionary<string, TreeNode>)node.Tag;
+
+                if (!dict.ContainsKey(room.GetParameterValue(parameters[i])))
+                {
+                    dict[room.GetParameterValue(parameters[i])] = new TreeNode(room.GetParameterValue(parameters[i]));
+                    node.Nodes.Add(dict[room.GetParameterValue(parameters[i])]);
+                }
+
+                node = dict[room.GetParameterValue(parameters[i])];
+            }
+
+            ListOfPremises.AddNode(room.GetParameterValue("AEC_ROOM_NAME"), room);
         }
     }
 
@@ -167,7 +164,7 @@ internal class FirstColumn : Container
         ListOfPremises.CollapseAll();
     }
 
-    private void Node_AfterCheck(object sender, TreeViewEventArgs e)
+    private void Node_AfterCheck(object? sender, TreeViewEventArgs e)
     {
         e.Node.CheckAllChildNodes(e.Node.Checked);
     }
